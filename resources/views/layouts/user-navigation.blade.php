@@ -4,7 +4,7 @@
     class="fixed w-full top-0 left-0 z-50 border-b border-gray-100 transition-all duration-500 ease-in-out">
     <div class="max-w-7xl mx-auto px-6 sm:px-4 lg:px-8">
         <div class="flex justify-between h-10">
-            <div class="flex items-center space-x-6 transition-all duration-300">
+            <div class="w-full flex justify-between items-center space-x-6 transition-all duration-300">
                 <a href="{{ route('home') }}" class="flex items-center space-x-2">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" :class="scrolled ? 'h-8 w-8' : 'h-10 w-10'"
                         class="rounded-full transition-all duration-500">

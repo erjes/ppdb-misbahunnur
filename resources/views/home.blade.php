@@ -24,7 +24,7 @@
 
     {{-- Alur Daftar Ulang --}}
     <section id="alur"
-        class="py-16 bg-gradient-to-b from-green-50 to-white bg-[url('/images/bg-pattern.png')] bg-cover bg-blend-overlay">
+        class="py-16 bg-gradient-to-b from-green to-white bg-[url('/images/bg-pattern.png')] bg-cover bg-blend-overlay">
         <div class="container mx-auto text-center px-6">
             <h2 class="text-3xl font-bold text-green-800 mb-6">ALUR DAFTAR ULANG</h2>
             <p class="text-green-900 font-semibold bg-green-100 inline-block px-5 py-2 rounded-lg shadow-sm">
