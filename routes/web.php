@@ -24,7 +24,7 @@ Route::middleware(['auth', 'verified','admin'])->group(function () {
 
 Route::get('/alur', fn() => view('option'))->name('alur');
 Route::get('/daftar', fn() => view('siswa.daftar'))->name('daftar');
-Route::delete('/daftar', [PendaftaranController::class, 'store'])->name('daftar.store');
+// Route::delete('/daftar', [PendaftaranController::class, 'store'])->name('daftar.store');
 Route::get('/login/siswa', fn() => view('siswa.login'))->name('login.siswa');
 
 require __DIR__.'/auth.php';

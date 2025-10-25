@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Fee extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'nama_biaya',
+        'jumlah',
+        'aktif',
+    ];
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+}
