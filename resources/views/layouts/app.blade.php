@@ -104,7 +104,7 @@
                         <h3 class="text-lg font-semibold mb-3">Tautan Cepat</h3>
                         <ul class="space-y-1 text-sm">
                             <li><a href="{{ url('/') }}" class="text-green-200 hover:text-white">Beranda</a></li>
-                            <li><a href="{{ route('login') }}" class="text-green-200 hover:text-white">Login Siswa</a>
+                            <li><a href="{{ route('login.siswa') }}" class="text-green-200 hover:text-white">Login Siswa</a>
                             </li>
                             <li><a href="{{ route('login') }}" class="text-green-200 hover:text-white">Login
                                     Admin</a></li>

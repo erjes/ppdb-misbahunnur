@@ -26,7 +26,7 @@ class Student extends Model
         'jurusan',
         'foto',
         'anak_ke',
-        'statuss_keluarga',
+        'status_keluarga',
         'paud',
         'tk',
         'citacita',
