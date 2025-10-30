@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\parents;
+use App\Models\ParentData;
 use App\Http\Requests\StoreparentsRequest;
 use App\Http\Requests\UpdateparentsRequest;
+use Illuminate\Http\Request;
 
 class ParentsController extends Controller
 {
@@ -13,15 +14,11 @@ class ParentsController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $parents = ParentData::with('student')->latest()->paginate(15);
+        
+        return view('parents.index', [
+            'parents' => $parents,
+        ]);
     }
 
     /**
@@ -29,38 +26,78 @@ class ParentsController extends Controller
      */
     public function store(StoreparentsRequest $request)
     {
-        //
+        $validated = $request->validated();
+        
+        try {
+            $parent = ParentData::create($validated);
+            
+            return redirect()
+                ->route('parents.index')
+                ->with('status', 'Data orang tua berhasil ditambahkan');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal menambah data orang tua');
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(parents $parents)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(parents $parents)
-    {
-        //
+        $parent = ParentData::with('student')->find($id);
+        
+        if (!$parent) {
+            abort(404);
+        }
+        
+        return view('parents.show', [
+            'parent' => $parent,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateparentsRequest $request, parents $parents)
+    public function update(UpdateparentsRequest $request, $id)
     {
-        //
+        $parent = ParentData::find($id);
+        
+        if (!$parent) {
+            return back()->withErrors('Data orang tua tidak ditemukan');
+        }
+        
+        $validated = $request->validated();
+        
+        try {
+            $parent->update($validated);
+            
+            return redirect()
+                ->route('parents.show', $parent->id)
+                ->with('status', 'Data orang tua berhasil diperbarui');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal memperbarui data orang tua');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(parents $parents)
+    public function destroy($id)
     {
-        //
+        $parent = ParentData::find($id);
+        
+        if (!$parent) {
+            return back()->withErrors('Data orang tua tidak ditemukan');
+        }
+        
+        try {
+            $parent->delete();
+            
+            return redirect()
+                ->route('parents.index')
+                ->with('status', 'Data orang tua berhasil dihapus');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal menghapus data orang tua');
+        }
     }
 }

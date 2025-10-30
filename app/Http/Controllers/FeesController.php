@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\fees;
+use App\Models\Fee;
 use App\Http\Requests\StorefeesRequest;
 use App\Http\Requests\UpdatefeesRequest;
+use Illuminate\Http\Request;
 
 class FeesController extends Controller
 {
@@ -13,15 +14,11 @@ class FeesController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $fees = Fee::with('payments')->latest()->paginate(15);
+        
+        return view('fees.index', [
+            'fees' => $fees,
+        ]);
     }
 
     /**
@@ -29,38 +26,78 @@ class FeesController extends Controller
      */
     public function store(StorefeesRequest $request)
     {
-        //
+        $validated = $request->validated();
+        
+        try {
+            $fee = Fee::create($validated);
+            
+            return redirect()
+                ->route('fees.index')
+                ->with('status', 'Biaya berhasil ditambahkan');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal menambah biaya');
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(fees $fees)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(fees $fees)
-    {
-        //
+        $fee = Fee::with('payments')->find($id);
+        
+        if (!$fee) {
+            abort(404);
+        }
+        
+        return view('fees.show', [
+            'fee' => $fee,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatefeesRequest $request, fees $fees)
+    public function update(UpdatefeesRequest $request, $id)
     {
-        //
+        $fee = Fee::find($id);
+        
+        if (!$fee) {
+            return back()->withErrors('Biaya tidak ditemukan');
+        }
+        
+        $validated = $request->validated();
+        
+        try {
+            $fee->update($validated);
+            
+            return redirect()
+                ->route('fees.show', $fee->id)
+                ->with('status', 'Biaya berhasil diperbarui');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal memperbarui biaya');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(fees $fees)
+    public function destroy($id)
     {
-        //
+        $fee = Fee::find($id);
+        
+        if (!$fee) {
+            return back()->withErrors('Biaya tidak ditemukan');
+        }
+        
+        try {
+            $fee->delete();
+            
+            return redirect()
+                ->route('fees.index')
+                ->with('status', 'Biaya berhasil dihapus');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal menghapus biaya');
+        }
     }
 }

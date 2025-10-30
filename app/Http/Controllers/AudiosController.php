@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\audios;
+use App\Models\Audio;
 use App\Http\Requests\StoreaudiosRequest;
 use App\Http\Requests\UpdateaudiosRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AudiosController extends Controller
 {
@@ -13,15 +15,11 @@ class AudiosController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $audios = Audio::with('uploader')->latest()->paginate(15);
+        
+        return view('audios.index', [
+            'audios' => $audios,
+        ]);
     }
 
     /**
@@ -29,38 +27,104 @@ class AudiosController extends Controller
      */
     public function store(StoreaudiosRequest $request)
     {
-        //
+        $validated = $request->validated();
+        
+        try {
+            // Handle file upload if present
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('audios', $filename, 'public');
+                $validated['file'] = $path;
+            }
+            
+            $audio = Audio::create($validated);
+            
+            return redirect()
+                ->route('audios.index')
+                ->with('status', 'Audio berhasil ditambahkan');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal menambah audio');
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(audios $audios)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(audios $audios)
-    {
-        //
+        $audio = Audio::with('uploader')->find($id);
+        
+        if (!$audio) {
+            abort(404);
+        }
+        
+        return view('audios.show', [
+            'audio' => $audio,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateaudiosRequest $request, audios $audios)
+    public function update(UpdateaudiosRequest $request, $id)
     {
-        //
+        $audio = Audio::find($id);
+        
+        if (!$audio) {
+            return back()->withErrors('Audio tidak ditemukan');
+        }
+        
+        $validated = $request->validated();
+        
+        try {
+            // Handle file upload if present
+            if ($request->hasFile('file')) {
+                // Delete old file if exists
+                if ($audio->file && Storage::disk('public')->exists($audio->file)) {
+                    Storage::disk('public')->delete($audio->file);
+                }
+                
+                $file = $request->file('file');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('audios', $filename, 'public');
+                $validated['file'] = $path;
+            }
+            
+            $audio->update($validated);
+            
+            return redirect()
+                ->route('audios.show', $audio->id)
+                ->with('status', 'Audio berhasil diperbarui');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal memperbarui audio');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(audios $audios)
+    public function destroy($id)
     {
-        //
+        $audio = Audio::find($id);
+        
+        if (!$audio) {
+            return back()->withErrors('Audio tidak ditemukan');
+        }
+        
+        try {
+            // Delete file if exists
+            if ($audio->file && Storage::disk('public')->exists($audio->file)) {
+                Storage::disk('public')->delete($audio->file);
+            }
+            
+            $audio->delete();
+            
+            return redirect()
+                ->route('audios.index')
+                ->with('status', 'Audio berhasil dihapus');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal menghapus audio');
+        }
     }
 }

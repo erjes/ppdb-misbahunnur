@@ -11,7 +11,7 @@ class UpdategradesRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,26 @@ class UpdategradesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'student_id' => 'sometimes|exists:students,id',
+            'mapel' => 'sometimes|string|max:100',
+            'semester' => 'sometimes|integer|min:1|max:12',
+            'nilai' => 'sometimes|numeric|min:0|max:100',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'student_id.exists' => 'Siswa tidak ditemukan.',
+            'semester.integer' => 'Semester harus berupa angka.',
+            'semester.min' => 'Semester minimal 1.',
+            'semester.max' => 'Semester maksimal 12.',
+            'nilai.numeric' => 'Nilai harus berupa angka.',
+            'nilai.min' => 'Nilai minimal 0.',
+            'nilai.max' => 'Nilai maksimal 100.',
         ];
     }
 }

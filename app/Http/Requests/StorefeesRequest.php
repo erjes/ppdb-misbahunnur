@@ -11,7 +11,7 @@ class StorefeesRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,23 @@ class StorefeesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nama_biaya' => 'required|string|max:255',
+            'jumlah' => 'required|numeric|min:0',
+            'aktif' => 'nullable|boolean',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'nama_biaya.required' => 'Nama biaya wajib diisi.',
+            'jumlah.required' => 'Jumlah biaya wajib diisi.',
+            'jumlah.numeric' => 'Jumlah biaya harus berupa angka.',
+            'jumlah.min' => 'Jumlah biaya tidak boleh negatif.',
+            'aktif.boolean' => 'Status aktif harus berupa true atau false.',
         ];
     }
 }

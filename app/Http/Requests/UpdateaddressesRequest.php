@@ -11,7 +11,7 @@ class UpdateaddressesRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,32 @@ class UpdateaddressesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'student_id' => 'sometimes|exists:students,id',
+            'alamat' => 'sometimes|string|max:255',
+            'rt' => 'nullable|string|max:10',
+            'rw' => 'nullable|string|max:10',
+            'desa' => 'sometimes|string|max:100',
+            'kecamatan' => 'sometimes|string|max:100',
+            'kota' => 'sometimes|string|max:100',
+            'provinsi' => 'sometimes|string|max:100',
+            'kode_pos' => 'nullable|string|max:10',
+            'koordinat' => 'nullable|string|max:100',
+            'transportasi' => 'nullable|string|max:50',
+            'status_tinggal' => 'nullable|string|max:50',
+            'jarak' => 'nullable|numeric|min:0',
+            'waktu' => 'nullable|string|max:50',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'student_id.exists' => 'Siswa tidak ditemukan.',
+            'jarak.numeric' => 'Jarak harus berupa angka.',
+            'jarak.min' => 'Jarak tidak boleh negatif.',
         ];
     }
 }

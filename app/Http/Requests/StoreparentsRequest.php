@@ -11,7 +11,7 @@ class StoreparentsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,34 @@ class StoreparentsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'student_id' => 'required|exists:students,id',
+            'hubungan' => 'required|string|max:50',
+            'nik' => 'nullable|string|max:20',
+            'nama' => 'required|string|max:255',
+            'tempat_lahir' => 'nullable|string|max:100',
+            'tahun_lahir' => 'nullable|integer|min:1900|max:' . date('Y'),
+            'pendidikan' => 'nullable|string|max:50',
+            'pekerjaan' => 'nullable|string|max:100',
+            'penghasilan' => 'nullable|numeric|min:0',
+            'no_hp' => 'nullable|string|max:20',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'student_id.required' => 'ID siswa wajib diisi.',
+            'student_id.exists' => 'Siswa tidak ditemukan.',
+            'hubungan.required' => 'Hubungan wajib diisi.',
+            'nama.required' => 'Nama wajib diisi.',
+            'tahun_lahir.integer' => 'Tahun lahir harus berupa angka.',
+            'tahun_lahir.min' => 'Tahun lahir tidak valid.',
+            'tahun_lahir.max' => 'Tahun lahir tidak boleh lebih dari tahun ini.',
+            'penghasilan.numeric' => 'Penghasilan harus berupa angka.',
+            'penghasilan.min' => 'Penghasilan tidak boleh negatif.',
         ];
     }
 }

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\addresses;
+use App\Models\Address;
 use App\Http\Requests\StoreaddressesRequest;
 use App\Http\Requests\UpdateaddressesRequest;
+use Illuminate\Http\Request;
 
 class AddressesController extends Controller
 {
@@ -13,15 +14,11 @@ class AddressesController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $addresses = Address::with('student')->latest()->paginate(15);
+        
+        return view('addresses.index', [
+            'addresses' => $addresses,
+        ]);
     }
 
     /**
@@ -29,38 +26,78 @@ class AddressesController extends Controller
      */
     public function store(StoreaddressesRequest $request)
     {
-        //
+        $validated = $request->validated();
+        
+        try {
+            $address = Address::create($validated);
+            
+            return redirect()
+                ->route('addresses.index')
+                ->with('status', 'Alamat berhasil ditambahkan');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal menambah alamat');
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(addresses $addresses)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(addresses $addresses)
-    {
-        //
+        $address = Address::with('student')->find($id);
+        
+        if (!$address) {
+            abort(404);
+        }
+        
+        return view('addresses.show', [
+            'address' => $address,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateaddressesRequest $request, addresses $addresses)
+    public function update(UpdateaddressesRequest $request, $id)
     {
-        //
+        $address = Address::find($id);
+        
+        if (!$address) {
+            return back()->withErrors('Alamat tidak ditemukan');
+        }
+        
+        $validated = $request->validated();
+        
+        try {
+            $address->update($validated);
+            
+            return redirect()
+                ->route('addresses.show', $address->id)
+                ->with('status', 'Alamat berhasil diperbarui');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal memperbarui alamat');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(addresses $addresses)
+    public function destroy($id)
     {
-        //
+        $address = Address::find($id);
+        
+        if (!$address) {
+            return back()->withErrors('Alamat tidak ditemukan');
+        }
+        
+        try {
+            $address->delete();
+            
+            return redirect()
+                ->route('addresses.index')
+                ->with('status', 'Alamat berhasil dihapus');
+        } catch (\Throwable $e) {
+            return back()->withErrors('Gagal menghapus alamat');
+        }
     }
 }
