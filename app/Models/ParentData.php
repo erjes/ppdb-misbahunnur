@@ -9,7 +9,7 @@ class ParentData extends Model
 {
     use HasFactory;
 
-    protected $table = 'parents'; // nama tabel di database
+    protected $table = 'parents'; 
 
     protected $fillable = [
         'student_id',

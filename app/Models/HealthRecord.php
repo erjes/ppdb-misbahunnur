@@ -9,6 +9,8 @@ class HealthRecord extends Model
 {
     use HasFactory;
 
+    protected $table = 'health_records';
+
     protected $fillable = [
         'student_id',
         'hepatitis',
