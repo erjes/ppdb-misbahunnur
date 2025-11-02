@@ -16,7 +16,8 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
 
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @filamentStyles
+    @vite('resources/css/app.css')
 
     <style>
         body {
@@ -118,7 +119,8 @@
             </div>
         </footer>
     </div>
-
+    @filamentScripts
+    @vite('resources/js/app.js')
 </body>
 
 </html>

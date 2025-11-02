@@ -18,11 +18,13 @@ class RegistrationsController extends Controller
      */
     public function index()
     {
-        $registrations = Registration::with('student')->latest()->paginate(15);
+        // $registrations = Registration::with('student')->latest()->paginate(15);
         
-        return view('registrations.index', [
-            'registrations' => $registrations,
-        ]);
+        return view('student.registrations.index'
+        // , [
+        //     'registrations' => $registrations,
+        // ]
+         );
     }
 
     /**

@@ -11,7 +11,7 @@
         </h1>
 
         <div class="flex justify-center space-x-6">
-            <a href="{{ route('daftar') }}"
+            <a href="{{ route('registration.form', ['slug' => 'ppdb-online']) }}"
                 class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300">
                 PENDAFTARAN
             </a>

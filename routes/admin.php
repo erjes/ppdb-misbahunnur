@@ -13,9 +13,15 @@ use App\Http\Controllers\AudiosController;
 use App\Http\Controllers\PendaftaranController;
 use Illuminate\Support\Facades\Route;
 
+// ... sisa kode routing Anda dimulai dari baris 16
+
 // Admin routes dengan middleware auth dan admin
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->group(function () {
     
+});
+
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     
     // Students Management
     Route::prefix('students')->group(function () {
