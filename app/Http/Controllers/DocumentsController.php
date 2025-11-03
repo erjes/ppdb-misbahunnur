@@ -32,8 +32,8 @@ class DocumentsController extends Controller
         
         try {
             // Handle file upload if present
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
+            if (request()->hasFile('file')) {
+                $file = request()->file('file');
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('documents', $filename, 'public');
                 $validated['file_path'] = $path;
@@ -80,13 +80,12 @@ class DocumentsController extends Controller
         
         try {
             // Handle file upload if present
-            if ($request->hasFile('file')) {
-                // Delete old file if exists
+            if (request()->hasFile('file')) {
                 if ($document->file_path && Storage::disk('public')->exists($document->file_path)) {
                     Storage::disk('public')->delete($document->file_path);
                 }
                 
-                $file = $request->file('file');
+                $file = request()->file('file');
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('documents', $filename, 'public');
                 $validated['file_path'] = $path;

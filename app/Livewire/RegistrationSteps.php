@@ -5,6 +5,9 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Form;
 use App\Models\FormSubmission;
+use App\Models\Student;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Livewire\WithFileUploads;
@@ -135,24 +138,47 @@ class RegistrationSteps extends Component
     public function submitForm()
     {
         $this->validateCurrentStep();
-        
-        // 1. Proses Upload Berkas
+
+        // 1) Proses Upload Berkas
         $path = $this->berkas_upload->store('public/pendaftaran');
 
-        // 2. Simpan Data ke Database
-        $jenisPendaftar = $this->formData['user_type'] ?? $this->formModel->type ?? null;
-        
-        $submission = FormSubmission::create([
-            'form_id' => $this->formModel->id,
-            'user_type' => $jenisPendaftar,
-            'submission_data' => array_merge(
-                $this->formData, 
-                ['berkas_path' => $path] 
-            ),
-        ]);
-        
+        // 2) Simpan keduanya dalam transaksi: FormSubmission dan Student
+        DB::transaction(function () use ($path) {
+            $jenisPendaftar = $this->formData['user_type'] ?? $this->formModel->type ?? null;
+
+            // Simpan FormSubmission
+            FormSubmission::create([
+                'form_id' => $this->formModel->id,
+                'user_type' => $jenisPendaftar,
+                'submission_data' => array_merge(
+                    $this->formData,
+                    ['berkas_path' => $path]
+                ),
+            ]);
+
+            // Siapkan data Student dari formData (hanya kolom yang diizinkan)
+            $fillable = (new Student())->getFillable();
+            $studentData = array_intersect_key($this->formData, array_flip($fillable));
+
+            // Map nomor_pendaftaran ke no_daftar bila tersedia
+            if (!isset($studentData['no_daftar']) && isset($this->formData['nomor_pendaftaran'])) {
+                $studentData['no_daftar'] = $this->formData['nomor_pendaftaran'];
+            }
+
+            // Set user_id bila user terautentikasi untuk memenuhi constraint FK
+            $userId = Auth::id();
+            if ($userId) {
+                $studentData['user_id'] = $userId;
+
+                // Opsional: jika ada kunci 'foto' di formData, gunakan; tidak, biarkan default/null
+                // studentData akan mengikuti kolom yang ada pada model Student
+
+                Student::create($studentData);
+            }
+        });
+
         session()->flash('message', 'Pendaftaran Anda berhasil dikirim');
-        $this->currentStep = $this->maxSteps + 2; 
+        $this->currentStep = $this->maxSteps + 2;
         redirect()->route('registration.index');
     }
 
