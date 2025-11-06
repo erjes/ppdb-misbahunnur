@@ -1,3 +1,4 @@
+
 <x-guest-layout>
     <div class="flex flex-col md:flex-row min-h-screen">
 
@@ -19,12 +20,12 @@
                     @csrf
 
                     <div>
-                        <x-input-label for="login" value="{{ __('Email atau Username') }}" class="text-green-100" />
-                        <x-text-input id="login"
+                        <x-input-label for="email" value="{{ __('Email') }}" class="text-green-100" />
+                        <x-text-input id="email"
                             class="block mt-1 w-full bg-white border-gray-300 focus:border-green-500 focus:ring-green-500 rounded-md shadow-sm text-gray-700"
-                            type="text" name="login" :value="old('login')" required autofocus
+                            type="email" name="email" :value="old('email')" required autofocus
                             placeholder="Masukkan email admin" />
-                        <x-input-error :messages="$errors->get('login')" class="mt-2 text-red-300" />
+                        <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-300" />
                     </div>
 
                     <div class="mt-4">

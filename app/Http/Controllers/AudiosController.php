@@ -7,6 +7,7 @@ use App\Http\Requests\StoreaudiosRequest;
 use App\Http\Requests\UpdateaudiosRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class AudiosController extends Controller
 {
@@ -17,7 +18,7 @@ class AudiosController extends Controller
     {
         $audios = Audio::with('uploader')->latest()->paginate(15);
         
-        return view('audios.index', [
+        return view('admin.audios.index', [
             'audios' => $audios,
         ]);
     }
@@ -27,12 +28,16 @@ class AudiosController extends Controller
      */
     public function store(StoreaudiosRequest $request)
     {
+        if (Auth::check()) {
+            request()->merge(['uploaded_by' => Auth::id()]);
+        }
+
         $validated = $request->validated();
         
         try {
             // Handle file upload if present
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
+            if (request()->hasFile('file')) {
+                $file = request()->file('file');
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('audios', $filename, 'public');
                 $validated['file'] = $path;
@@ -41,7 +46,7 @@ class AudiosController extends Controller
             $audio = Audio::create($validated);
             
             return redirect()
-                ->route('audios.index')
+                ->route('admin.audios.index')
                 ->with('status', 'Audio berhasil ditambahkan');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menambah audio');
@@ -59,7 +64,7 @@ class AudiosController extends Controller
             abort(404);
         }
         
-        return view('audios.show', [
+        return view('admin.audios.show', [
             'audio' => $audio,
         ]);
     }
@@ -76,16 +81,19 @@ class AudiosController extends Controller
         }
         
         $validated = $request->validated();
+
+        // Prevent changing the uploader via update
+        unset($validated['uploaded_by']);
         
         try {
             // Handle file upload if present
-            if ($request->hasFile('file')) {
+            if (request()->hasFile('file')) {
                 // Delete old file if exists
                 if ($audio->file && Storage::disk('public')->exists($audio->file)) {
                     Storage::disk('public')->delete($audio->file);
                 }
                 
-                $file = $request->file('file');
+                $file = request()->file('file');
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $path = $file->storeAs('audios', $filename, 'public');
                 $validated['file'] = $path;
@@ -94,7 +102,7 @@ class AudiosController extends Controller
             $audio->update($validated);
             
             return redirect()
-                ->route('audios.show', $audio->id)
+                ->route('admin.audios.show', $audio->id)
                 ->with('status', 'Audio berhasil diperbarui');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal memperbarui audio');
@@ -121,7 +129,7 @@ class AudiosController extends Controller
             $audio->delete();
             
             return redirect()
-                ->route('audios.index')
+                ->route('admin.audios.index')
                 ->with('status', 'Audio berhasil dihapus');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menghapus audio');

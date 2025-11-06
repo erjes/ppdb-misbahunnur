@@ -12,43 +12,23 @@ class Student extends Model
 
     protected $fillable = [
         'user_id',
-        'no_daftar',
+        'nomor_pendaftaran',
+        'nama_lengkap',
         'nisn',
-        'nik',
-        'no_kk',
-        'nis',
-        'nama',
+        'nik_siswa',
         'jenis_kelamin',
-        'tempat_lahir',
-        'tgl_lahir',
+        'tempat_kelahiran',
+        'tanggal_lahir',
         'agama',
-        'asal_sekolah',
-        'npsn_asal',
-        'jenjang',
-        'jurusan',
-        'foto',
-        'anak_ke',
-        'status_keluarga',
-        'paud',
-        'tk',
-        'citacita',
-        'hobi',
-        'sekolah_tujuan',
+        'no_hp',
+        'nama_ayah',
+        'nama_ibu',
+        'no_kk',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function address()
-    {
-        return $this->hasOne(Address::class);
-    }
-
-    public function parents()
-    {
-        return $this->hasMany(ParentData::class);
     }
 
     public function documents()

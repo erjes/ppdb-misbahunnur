@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Form;
+use App\Models\FormSubmission;
 
 class FormSeeder extends Seeder
 {
@@ -86,8 +87,8 @@ class FormSeeder extends Seeder
                         ['name' => 'tahun_lahir_ayah', 'type' => 'text', 'label' => 'Tahun Lahir Ayah', 'required' => true],
                         ['name' => 'status_ayah', 'type' => 'select', 'label' => 'Status Ayah', 'options' => ['Hidup' => 'Hidup', 'Meninggal' => 'Meninggal']],
                         ['name' => 'pekerjaan_ayah', 'type' => 'text', 'label' => 'Pekerjaan Ayah'],
-                        ['name' => 'penghasilan_ayah', 'type' => 'select', 'label' => 'Penghasilan Ayah', 'options' => ['<500.000' => '<500.000', '500.000-1jt' => '500.000-1jt', '1jt-3jt' => '1jt-3jt', '3jt-5jt' => '3jt-5jt', '>5jt' => '>5jt']],
-                        ['name' => 'pendidikan_ayah', 'type' => 'select', 'label' => 'Pendidikan Ayah', 'options' => ['SD' => 'SD', 'SMP' => 'SMP', 'SMA' => 'SMA', 'D3' => 'D3', 'S1' => 'S1', 'S2' => 'S2', 'S3' => 'S3']],
+                        ['name' => 'penghasilan_ayah', 'type' => 'select', 'label' => 'Penghasilan Ayah', 'options' => ['Tidak ada' => '-','<500.000' => '<500.000', '500.000-1jt' => '500.000-1jt', '1jt-3jt' => '1jt-3jt', '3jt-5jt' => '3jt-5jt', '>5jt' => '>5jt']],
+                        ['name' => 'pendidikan_ayah', 'type' => 'select', 'label' => 'Pendidikan Ayah', 'options' => ['Tidak ada' => '-','SD' => 'SD', 'SMP' => 'SMP', 'SMA' => 'SMA', 'D3' => 'D3', 'S1' => 'S1', 'S2' => 'S2', 'S3' => 'S3']],
 
                         // Ibu
                         ['name' => 'nama_ibu', 'type' => 'text', 'label' => 'Nama Ibu Kandung', 'required' => true],
@@ -95,16 +96,16 @@ class FormSeeder extends Seeder
                         ['name' => 'tahun_lahir_ibu', 'type' => 'text', 'label' => 'Tahun Lahir Ibu', 'required' => true],
                         ['name' => 'status_ibu', 'type' => 'select', 'label' => 'Status Ibu', 'options' => ['Hidup' => 'Hidup', 'Meninggal' => 'Meninggal']],
                         ['name' => 'pekerjaan_ibu', 'type' => 'text', 'label' => 'Pekerjaan Ibu'],
-                        ['name' => 'penghasilan_ibu', 'type' => 'select', 'label' => 'Penghasilan Ibu', 'options' => ['<500.000' => '<500.000', '500.000-1jt' => '500.000-1jt', '1jt-3jt' => '1jt-3jt', '3jt-5jt' => '3jt-5jt', '>5jt' => '>5jt']],
-                        ['name' => 'pendidikan_ibu', 'type' => 'select', 'label' => 'Pendidikan Ibu', 'options' => ['SD' => 'SD', 'SMP' => 'SMP', 'SMA' => 'SMA', 'D3' => 'D3', 'S1' => 'S1', 'S2' => 'S2', 'S3' => 'S3']],
+                        ['name' => 'penghasilan_ibu', 'type' => 'select', 'label' => 'Penghasilan Ibu', 'options' => ['Tidak ada' => '-','<500.000' => '<500.000', '500.000-1jt' => '500.000-1jt', '1jt-3jt' => '1jt-3jt', '3jt-5jt' => '3jt-5jt', '>5jt' => '>5jt']],
+                        ['name' => 'pendidikan_ibu', 'type' => 'select', 'label' => 'Pendidikan Ibu', 'options' => ['Tidak ada' => '-','SD' => 'SD', 'SMP' => 'SMP', 'SMA' => 'SMA', 'D3' => 'D3', 'S1' => 'S1', 'S2' => 'S2', 'S3' => 'S3']],
 
                         // Wali
                         ['name' => 'nama_wali', 'type' => 'text', 'label' => 'Nama Wali'],
                         ['name' => 'nik_wali', 'type' => 'text', 'label' => 'NIK Wali'],
                         ['name' => 'tahun_lahir_wali', 'type' => 'text', 'label' => 'Tahun Lahir Wali'],
                         ['name' => 'pekerjaan_wali', 'type' => 'text', 'label' => 'Pekerjaan Wali'],
-                        ['name' => 'penghasilan_wali', 'type' => 'select', 'label' => 'Penghasilan Wali', 'options' => ['<500.000' => '<500.000', '500.000-1jt' => '500.000-1jt', '1jt-3jt' => '1jt-3jt', '3jt-5jt' => '3jt-5jt', '>5jt' => '>5jt']],
-                        ['name' => 'pendidikan_wali', 'type' => 'select', 'label' => 'Pendidikan Wali', 'options' => ['SD' => 'SD', 'SMP' => 'SMP', 'SMA' => 'SMA', 'D3' => 'D3', 'S1' => 'S1', 'S2' => 'S2', 'S3' => 'S3']],
+                        ['name' => 'penghasilan_wali', 'type' => 'select', 'label' => 'Penghasilan Wali', 'options' => ['Tidak ada' => '-','<500.000' => '<500.000', '500.000-1jt' => '500.000-1jt', '1jt-3jt' => '1jt-3jt', '3jt-5jt' => '3jt-5jt', '>5jt' => '>5jt']],
+                        ['name' => 'pendidikan_wali', 'type' => 'select', 'label' => 'Pendidikan Wali', 'options' => ['Tidak ada' => '-', 'SD' => 'SD', 'SMP' => 'SMP', 'SMA' => 'SMA', 'D3' => 'D3', 'S1' => 'S1', 'S2' => 'S2', 'S3' => 'S3']],
                         ['name' => 'no_hp_wali', 'type' => 'text', 'label' => 'No. HP Orang Tua/Wali'],
 
                         // Kepemilikan Kartu
@@ -126,5 +127,74 @@ class FormSeeder extends Seeder
                 ]
             ]),
         ]);
+
+
+        // FormSubmission::create([
+        //     'form_id' => '1',
+        //     'submission_data' => [ 
+        //         [ 
+        //             "kip" => "rrr",
+        //             "kks" => "rrr",
+        //             "pkh" => "rrr",
+        //             "desa" => "vbnm",
+        //             "hobi" => "Olahraga",
+        //             "nisn" => "1234567812",
+        //             "agama" => "Lainnya",
+        //             "no_hp" => "0892345678",
+        //             "no_kk" => "1234567812345678",
+        //             "alamat" => "Jl msms",
+        //             "anak_ke" => "1",
+        //             "nik_ibu" => "1234567812345678",
+        //             "kode_pos" => "12345",
+        //             "nama_ibu" => "rrr",
+        //             "nik_ayah" => "1234567812345678",
+        //             "nik_wali" => "1234567812345678",
+        //             "provinsi" => "vbnm",
+        //             "cita_cita" => "PNS",
+        //             "kabupaten" => "vbnm",
+        //             "kecamatan" => "vbnm",
+        //             "nama_ayah" => "rrr",
+        //             "nama_wali" => "rrr",
+        //             "nik_siswa" => "1234567812345678",
+        //             "pernah_tk" => "Tidak",
+        //             "user_type" => "MTS",
+        //             "no_hp_wali" => "0812345678",
+        //             "status_ibu" => "Hidup",
+        //             "berkas_path" => "public/pendaftaran/GA3iU1guZulQcA1KoB51k7b3KkqI2iyL8SD4ukBZ.png",
+        //             "pernah_paud" => "Ya",
+        //             "status_ayah" => "Hidup",
+        //             "nama_lengkap" => "ddfghjk",
+        //             "nama_sekolah" => "mjsks",
+        //             "npsn_sekolah" => "12345678",
+        //             "transportasi" => "Lainnya",
+        //             "jenis_kelamin" => "L",
+        //             "pekerjaan_ibu" => "rrr",
+        //             "tanggal_lahir" => "2007-07-07",
+        //             "jumlah_saudara" => "1",
+        //             "lokasi_sekolah" => "kkakak",
+        //             "pekerjaan_ayah" => "rrr",
+        //             "pekerjaan_wali" => "rrr",
+        //             "pendidikan_ibu" => "SMP",
+        //             "status_sekolah" => "Negeri",
+        //             "jenjang_sekolah" => "SMP",
+        //             "pendidikan_ayah" => "SD",
+        //             "pendidikan_wali" => "SMP",
+        //             "penghasilan_ibu" => "<500.000",
+        //             "status_keluarga" => "Anak Tiri",
+        //             "tahun_lahir_ibu" => "rrr",
+        //             "jarak_ke_sekolah" => "1-3 km",
+        //             "penghasilan_ayah" => "500.000-1jt",
+        //             "penghasilan_wali" => "",
+        //             "setuju_ketentuan" => null,
+        //             "tahun_lahir_ayah" => "rrr",
+        //             "tahun_lahir_wali" => "rrr",
+        //             "tempat_kelahiran" => "ghjkl",
+        //             "jenis_pendaftaran" => "Baru",
+        //             "nomor_pendaftaran" => "2025-2030909207",
+        //             "jenis_tempat_tinggal" => "Rumah Orang Tua",
+        //             "nama_kepala_keluarga" => "1234567812345678"
+        //         ] 
+        //     ] 
+        // ]);
     }
 }

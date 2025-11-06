@@ -20,6 +20,7 @@ class PaymentsController extends Controller
         // return view('payments.index', [
         //     'payments' => $payments,
         // ]);
+        return view('admin.payments.index');
     }
 
     /**

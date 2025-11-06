@@ -18,6 +18,24 @@ class AuthenticatedSessionController extends Controller
     {
         return view('auth.login');
     }
+    
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'string'], // Nomor Pendaftaran
+            'password' => ['required', 'string'], // NISN
+        ]);
+    
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+    
+            return redirect()->route('registration.status'); 
+        }
+    
+        return back()->withErrors([
+            'email' => 'Nomor Pendaftaran atau NISN tidak sesuai.',
+        ])->onlyInput('email');
+    }
 
     /**
      * Handle an incoming authentication request.
@@ -25,14 +43,14 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+        // $request->session()->regenerate();
+        session()->regenerate();
 
-        $request->session()->regenerate();
-
-        if (Auth::user()->role === 'admin') {
-            return redirect()->intended(route('admin.index', absolute: false));
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') {
+            return redirect()->intended(route('admin.students.index', absolute: false));
         }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('home', absolute: false));
     }
 
     /**

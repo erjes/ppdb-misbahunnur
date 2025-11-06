@@ -16,7 +16,7 @@ class HealthRecordsController extends Controller
     {
         $healthRecords = HealthRecord::with('student')->latest()->paginate(15);
         
-        return view('health_records.index', [
+        return view('admin.health_records.index', [
             'healthRecords' => $healthRecords,
         ]);
     }
@@ -32,7 +32,7 @@ class HealthRecordsController extends Controller
             $healthRecord = HealthRecord::create($validated);
             
             return redirect()
-                ->route('health-records.index')
+                ->route('admin.health-records.index')
                 ->with('status', 'Data kesehatan berhasil ditambahkan');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menambah data kesehatan');
@@ -50,7 +50,7 @@ class HealthRecordsController extends Controller
             abort(404);
         }
         
-        return view('health_records.show', [
+        return view('admin.health_records.show', [
             'healthRecord' => $healthRecord,
         ]);
     }
@@ -72,7 +72,7 @@ class HealthRecordsController extends Controller
             $healthRecord->update($validated);
             
             return redirect()
-                ->route('health-records.show', $healthRecord->id)
+                ->route('admin.health-records.show', $healthRecord->id)
                 ->with('status', 'Data kesehatan berhasil diperbarui');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal memperbarui data kesehatan');
@@ -94,7 +94,7 @@ class HealthRecordsController extends Controller
             $healthRecord->delete();
             
             return redirect()
-                ->route('health-records.index')
+                ->route('admin.health-records.index')
                 ->with('status', 'Data kesehatan berhasil dihapus');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menghapus data kesehatan');

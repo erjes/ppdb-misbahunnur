@@ -16,7 +16,7 @@ class GradesController extends Controller
     {
         $grades = Grade::with('student')->latest()->paginate(15);
         
-        return view('grades.index', [
+        return view('admin.grades.index', [
             'grades' => $grades,
         ]);
     }
@@ -32,7 +32,7 @@ class GradesController extends Controller
             $grade = Grade::create($validated);
             
             return redirect()
-                ->route('grades.index')
+                ->route('admin.grades.index')
                 ->with('status', 'Nilai berhasil ditambahkan');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menambah nilai');
@@ -50,7 +50,7 @@ class GradesController extends Controller
             abort(404);
         }
         
-        return view('grades.show', [
+        return view('admin.grades.show', [
             'grade' => $grade,
         ]);
     }
@@ -72,7 +72,7 @@ class GradesController extends Controller
             $grade->update($validated);
             
             return redirect()
-                ->route('grades.show', $grade->id)
+                ->route('admin.grades.show', $grade->id)
                 ->with('status', 'Nilai berhasil diperbarui');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal memperbarui nilai');
@@ -94,7 +94,7 @@ class GradesController extends Controller
             $grade->delete();
             
             return redirect()
-                ->route('grades.index')
+                ->route('admin.grades.index')
                 ->with('status', 'Nilai berhasil dihapus');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menghapus nilai');

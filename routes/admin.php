@@ -16,14 +16,13 @@ use Illuminate\Support\Facades\Route;
 // ... sisa kode routing Anda dimulai dari baris 16
 
 // Admin routes dengan middleware auth dan admin
-Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->group(function () {
+Route::middleware(['auth', 'verified', 'super_admin'])->prefix('super-admin')->group(function () {
     
 });
 
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    
-    // Students Management
+Route::middleware(['auth', 'verified','admin'])->prefix('admin')->group(function () {
+    // Students Manageme=t
     Route::prefix('students')->group(function () {
         Route::get('/', [StudentsController::class, 'index'])->name('admin.students.index');
         Route::get('/create', [StudentsController::class, 'create'])->name('admin.students.create');

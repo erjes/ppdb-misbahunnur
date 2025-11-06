@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\ParentData;
 use App\Http\Requests\StoreregistrationsRequest;
 use App\Http\Requests\UpdateregistrationsRequest;
+use App\Models\FormSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,98 +19,37 @@ class RegistrationsController extends Controller
      */
     public function index()
     {
-        // $registrations = Registration::with('student')->latest()->paginate(15);
-        
-        return view('student.registrations.index'
-        // , [
-        //     'registrations' => $registrations,
-        // ]
-         );
-    }
-
-    /**
-     * Show the multi-step registration form.
-     */
-    public function create()
-    {
-        return view('registrations.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreregistrationsRequest $request)
-    {
-        $validated = $request->validated();
-
-        try {
-            $registration = DB::transaction(function () use ($validated) {
-                // 1) Create or find Student
-                $studentPayload = $validated['student'];
-
-                // map sekolah-asal group into student fields if provided
-                if (isset($validated['school'])) {
-                    $studentPayload['asal_sekolah'] = $validated['school']['nama'] ?? null;
-                    $studentPayload['npsn_asal'] = $validated['school']['npsn'] ?? null;
-                    $studentPayload['jenjang'] = $validated['school']['jenjang'] ?? ($studentPayload['jenjang'] ?? null);
-                }
-
-                $student = Student::create($studentPayload);
-
-                // 2) Address
-                if (isset($validated['address'])) {
-                    Address::create(array_merge($validated['address'], [
-                        'student_id' => $student->id,
-                    ]));
-                }
-
-                // 3) Parents (ayah, ibu wajib, wali opsional)
-                if (isset($validated['parents'])) {
-                    foreach ($validated['parents'] as $relation => $parentData) {
-                        if (!is_array($parentData)) {
-                            continue;
-                        }
-                        ParentData::create(array_merge($parentData, [
-                            'student_id' => $student->id,
-                            'hubungan' => $relation, // ayah|ibu|wali
-                        ]));
-                    }
-                }
-
-                // 4) Registration row
-                $registrationPayload = $validated['registration'] ?? [];
-                $registrationPayload['student_id'] = $student->id;
-
-                // default values if not set
-                $registrationPayload['tgl_daftar'] = $registrationPayload['tgl_daftar'] ?? now();
-                $registrationPayload['online'] = $registrationPayload['online'] ?? true;
-                $registrationPayload['status'] = $registrationPayload['status'] ?? 'pending';
-
-                return Registration::create($registrationPayload);
-            });
-
-            return redirect()
-                ->route('registrations.show', $registration->id)
-                ->with('status', 'Pendaftaran berhasil ditambahkan');
-        } catch (\Throwable $e) {
-            return back()->withErrors('Gagal menambah pendaftaran');
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $registration = Registration::with('student')->find($id);
-        
-        if (!$registration) {
-            abort(404);
+        $form = \App\Models\Form::where('slug', 'ppdb-online')->first();
+        $submissions = collect();
+        if ($form) {
+            $submissions = FormSubmission::where('form_id', $form->id)->get();
         }
         
-        return view('registrations.show', [
+        return view('admin.students.index',compact('submissions'));
+    }
+
+    public function edit($id){
+        $registration = Registration::with(['student.address', 'student.parents'])->findOrFail($id);
+
+        $form = \App\Models\Form::where('slug', 'ppdb-online')->first();
+
+        $formSubmission = null;
+        if ($form) {
+            $formSubmission = \App\Models\FormSubmission::where('form_id', $form->id)
+                ->where('user_type', 'student')
+                ->whereJsonContains('submission_data->student_id', $registration->student_id)
+                ->first();
+        }
+
+        return view('admin.students.edit', [
             'registration' => $registration,
+            'student' => $registration->student,
+            'address' => $registration->student->address ?? null,
+            'parents' => $registration->student->parents ?? collect(),
+            'formSubmission' => $formSubmission,
+            'form' => $form,
         ]);
+
     }
 
     /**
@@ -179,7 +119,7 @@ class RegistrationsController extends Controller
             });
             
             return redirect()
-                ->route('registrations.show', $registration->id)
+                ->route('admin.students.show', $registration->id)
                 ->with('status', 'Pendaftaran berhasil diperbarui');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal memperbarui pendaftaran');
@@ -201,7 +141,7 @@ class RegistrationsController extends Controller
             $registration->delete();
             
             return redirect()
-                ->route('registrations.index')
+                ->route('admin.registrations.index')
                 ->with('status', 'Pendaftaran berhasil dihapus');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menghapus pendaftaran');

@@ -1,6 +1,7 @@
 <x-guest-layout>
     <div class="flex flex-col md:flex-row min-h-screen">
 
+        {{-- Kolom Kiri (Ilustrasi/Logo) --}}
         <div class="hidden md:flex md:w-1/2 bg-gray-100 items-center justify-center p-12">
             <div class="max-w-md">
                 <img src="{{ asset('images/logo.png') }}" alt="Ilustrasi Login" class="w-full h-auto">
@@ -14,26 +15,27 @@
                     {{ __('Login Siswa') }}
                 </h1>
                 <p class="text-sm text-green-200 mb-8 text-center md:text-left">
-                    {{ __('Masukkan detail Anda untuk masuk ke akun Anda') }}
+                    {{ __('Gunakan Nomor Pendaftaran dan NISN untuk masuk ke akun Anda') }}
                 </p>
 
                 <x-auth-session-status class="mb-2 text-white bg-green-600 p-3 rounded" :status="session('status')" />
 
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('student.authenticate') }}">
                     @csrf
 
                     <div>
-                        <x-input-label for="email" value="{{ __('Email') }}" class="text-green-100" />
+                        <x-input-label for="email" value="{{ __('Nomor Pendaftaran') }}" class="text-green-100" />
                         <x-text-input id="email"
                             class="block mt-1 w-full bg-white border-gray-300 focus:border-green-500 focus:ring-green-500 rounded-md shadow-sm text-gray-700"
-                            type="email" name="email" :value="old('email')" required autofocus autocomplete="username"
-                            placeholder="contoh@email.com" />
+                            type="text" name="email" :value="old('email')" required autofocus autocomplete="username"
+                            placeholder="Nomor Pendaftaran" />
+                        
                         <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-300" />
                     </div>
 
                     <div class="mt-4">
                         <div class="flex items-center justify-between">
-                            <x-input-label for="password" value="{{ __('Kata Sandi') }}" class="text-green-100" />
+                            <x-input-label for="password" value="{{ __('N.I.S.N (Password)') }}" class="text-green-100" />
                             @if (Route::has('password.request'))
                                 <a class="underline text-xs text-green-200 hover:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-800 focus:ring-green-500"
                                     href="{{ route('password.request') }}">
@@ -42,10 +44,11 @@
                             @endif
                         </div>
 
-                        <x-text-input id="password"
+                        <x-text-input id="nisn_input"
                             class="block mt-1 w-full bg-white border-gray-300 focus:border-green-500 focus:ring-green-500 rounded-md shadow-sm text-gray-700"
                             type="password" name="password" required autocomplete="current-password"
-                            placeholder="············" />
+                            placeholder="N.I.S.N" />
+                        
                         <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-300" />
                     </div>
 
@@ -80,6 +83,5 @@
                 </form>
             </div>
         </div>
-
     </div>
 </x-guest-layout>

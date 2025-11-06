@@ -16,7 +16,7 @@ class FeesController extends Controller
     {
         $fees = Fee::with('payments')->latest()->paginate(15);
         
-        return view('fees.index', [
+        return view('admin.fees.index', [
             'fees' => $fees,
         ]);
     }
@@ -32,7 +32,7 @@ class FeesController extends Controller
             $fee = Fee::create($validated);
             
             return redirect()
-                ->route('fees.index')
+                ->route('admin.fees.index')
                 ->with('status', 'Biaya berhasil ditambahkan');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menambah biaya');
@@ -50,7 +50,7 @@ class FeesController extends Controller
             abort(404);
         }
         
-        return view('fees.show', [
+        return view('admin.fees.show', [
             'fee' => $fee,
         ]);
     }
@@ -72,7 +72,7 @@ class FeesController extends Controller
             $fee->update($validated);
             
             return redirect()
-                ->route('fees.show', $fee->id)
+                ->route('admin.fees.show', $fee->id)
                 ->with('status', 'Biaya berhasil diperbarui');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal memperbarui biaya');
@@ -94,7 +94,7 @@ class FeesController extends Controller
             $fee->delete();
             
             return redirect()
-                ->route('fees.index')
+                ->route('admin.fees.index')
                 ->with('status', 'Biaya berhasil dihapus');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menghapus biaya');

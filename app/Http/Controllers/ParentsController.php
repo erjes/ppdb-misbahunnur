@@ -16,7 +16,7 @@ class ParentsController extends Controller
     {
         $parents = ParentData::with('student')->latest()->paginate(15);
         
-        return view('parents.index', [
+        return view('admin.parents.index', [
             'parents' => $parents,
         ]);
     }
@@ -32,7 +32,7 @@ class ParentsController extends Controller
             $parent = ParentData::create($validated);
             
             return redirect()
-                ->route('parents.index')
+                ->route('admin.parents.index')
                 ->with('status', 'Data orang tua berhasil ditambahkan');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menambah data orang tua');
@@ -50,7 +50,7 @@ class ParentsController extends Controller
             abort(404);
         }
         
-        return view('parents.show', [
+        return view('admin.parents.show', [
             'parent' => $parent,
         ]);
     }
@@ -72,7 +72,7 @@ class ParentsController extends Controller
             $parent->update($validated);
             
             return redirect()
-                ->route('parents.show', $parent->id)
+                ->route('admin.parents.show', $parent->id)
                 ->with('status', 'Data orang tua berhasil diperbarui');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal memperbarui data orang tua');
@@ -94,7 +94,7 @@ class ParentsController extends Controller
             $parent->delete();
             
             return redirect()
-                ->route('parents.index')
+                ->route('admin.parents.index')
                 ->with('status', 'Data orang tua berhasil dihapus');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menghapus data orang tua');

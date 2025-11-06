@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStudentsRequest;
 use App\Http\Requests\UpdateStudentsRequest;
+use App\Models\Form;
+use App\Models\FormSubmission;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Registration;
@@ -14,17 +16,24 @@ class StudentsController extends Controller
 {
     public function index()
     {
-        $students = Student::with(['user', 'address', 'parents', 'registration'])
-            ->latest()
-            ->paginate(15);
+        // $students = Student::with(['user', 'address', 'parents', 'registration'])
+        //     ->latest()
+        //     ->paginate(15);
 
-        return view('students.index', [
-            'students' => $students,
-        ]);
+        // return view('admin.students.index', [
+        //     'students' => $students,
+        // ]);
+        $form = Form::where('slug', 'ppdb-online')->first();
+        $submissions = collect();
+        if ($form) {
+            $submissions = FormSubmission::where('form_id', $form->id)->get();
+        }
+        
+        return view('admin.students.index',compact('submissions'));
     }
 
     public function edit($id){
-        return view('students.edit', compact('id'));
+        return view('admin.students.edit', compact('id'));
     }
 
     public function show($id)
@@ -36,13 +45,13 @@ class StudentsController extends Controller
             abort(404);
         }
 
-        return view('students.show', [
+        return view('admin.students.show', [
             'student' => $student,
         ]);
     }
 
     public function create(){
-        return view('students.index');
+        return view('admin.students.index');
     }
 
     public function store(StoreStudentsRequest $request)
@@ -74,7 +83,7 @@ class StudentsController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('students.index')
+                ->route('admin.students.index')
                 ->with('status', 'Siswa berhasil ditambahkan');
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -108,7 +117,7 @@ class StudentsController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('students.show', $student->id)
+                ->route('admin.students.show', $student->id)
                 ->with('status', 'Data siswa berhasil diperbarui');
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -129,7 +138,7 @@ class StudentsController extends Controller
             $student->delete();
 
             return redirect()
-                ->route('students.index')
+                ->route('admin.students.index')
                 ->with('status', 'Siswa berhasil dihapus');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menghapus siswa');

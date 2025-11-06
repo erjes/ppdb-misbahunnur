@@ -2,23 +2,22 @@
 
 namespace App\Livewire;
 
+use App\Enums\UserRole;
 use Livewire\Component;
 use App\Models\Form;
 use App\Models\FormSubmission;
+use App\Models\Registration;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 
 #[Layout('layouts.guest')]
 
 class RegistrationSteps extends Component
 {
-    use WithFileUploads;
-
     public $formDefinition;
     public $formModel; 
     public $formData = [];
@@ -26,11 +25,9 @@ class RegistrationSteps extends Component
     public $currentStep = 1;
     public $maxSteps;
 
-    public $berkas_upload;
     public $konfirmasi_data_sesuai = false;
     public $setuju_ketentuan = false;
     
-    // render skema formulir dari database
     public function mount($slug = 'ppdb-online')
     {
         $this->formModel = Form::where('slug', $slug)->firstOrFail();
@@ -47,7 +44,6 @@ class RegistrationSteps extends Component
         
         foreach ($this->formDefinition as $step) {
             foreach ($step['fields'] as $field) {
-                // Inisialisasi dengan string kosong untuk select, null untuk yang lain
                 $this->formData[$field['name']] = ($field['type'] === 'select') ? '' : null;
             }
         }
@@ -56,12 +52,9 @@ class RegistrationSteps extends Component
         $this->formData['nomor_pendaftaran'] = $nomor_pendaftaran;
     }
 
-    // Navigasi
-
     public function nextStep()
     {
         try {
-            // Untuk step 1, validasi manual dulu
             if ($this->currentStep === 1) {
                 $userType = trim($this->formData['user_type'] ?? '');
                 if (empty($userType)) {
@@ -82,7 +75,6 @@ class RegistrationSteps extends Component
             throw $e;
         }
 
-        // Pindah step
         if ($this->currentStep < $this->maxSteps + 1) {
             $this->currentStep++;
             $this->dispatch('scroll-to', target: '#form-start');
@@ -104,7 +96,6 @@ class RegistrationSteps extends Component
     
         $currentStepData = collect($this->formDefinition)->firstWhere('step_number', $this->currentStep);
     
-        // Validasi untuk step 2 - 5
         if ($currentStepData && $this->currentStep > 1 && $this->currentStep <= $this->maxSteps) {
             foreach ($currentStepData['fields'] as $field) {
                 $fieldName = 'formData.' . $field['name'];
@@ -115,7 +106,6 @@ class RegistrationSteps extends Component
                 }
     
                 if (!empty($fieldRules)) {
-                    // Konversi string rules ke array 
                     $rules[$fieldName] = is_string($fieldRules) ? explode('|', $fieldRules) : $fieldRules;
                 }
             }
@@ -123,7 +113,6 @@ class RegistrationSteps extends Component
 
         if ($this->currentStep == $this->maxSteps + 1) {
             $rules = array_merge($rules, [
-                'berkas_upload' => ['required', 'file', 'mimes:pdf,jpg,png', 'max:5120'],
                 'konfirmasi_data_sesuai' => ['required', 'accepted'],
             ]);
         }
@@ -133,64 +122,67 @@ class RegistrationSteps extends Component
         }
     }
     
-    // ---  Submit Formulir ---
-
     public function submitForm()
     {
         $this->validateCurrentStep();
+    
+        $nomorPendaftaran = $this->formData['nomor_pendaftaran'];
 
-        // 1) Proses Upload Berkas
-        $path = $this->berkas_upload->store('public/pendaftaran');
-
-        // 2) Simpan keduanya dalam transaksi: FormSubmission dan Student
-        DB::transaction(function () use ($path) {
+        DB::transaction(function () {
             $jenisPendaftar = $this->formData['user_type'] ?? $this->formModel->type ?? null;
-
-            // Simpan FormSubmission
+            
+            $user = User::create([
+                'email' => $this->formData['nomor_pendaftaran'],
+                'name' => $this->formData['nama_lengkap'],
+                'password' => Hash::make($this->formData['nisn']),
+                'role' => UserRole::user->value,
+                'is_active' => true,
+            ]);
+            
+            $userId = $user->id; 
+    
+            $student = Student::create([
+                'user_id' => $userId, 
+                'nomor_pendaftaran' => $this->formData['nomor_pendaftaran'], 
+                'nama_lengkap' => $this->formData['nama_lengkap'],
+                'nisn' => $this->formData['nisn'],
+                'nik_siswa' => $this->formData['nik_siswa'],
+                'jenis_kelamin' => $this->formData['jenis_kelamin'],
+                'tempat_kelahiran' => $this->formData['tempat_kelahiran'],
+                'tanggal_lahir' => $this->formData['tanggal_lahir'],
+                'agama' => $this->formData['agama'],
+                'no_hp' => $this->formData['no_hp'],
+                'nama_ayah' => $this->formData['nama_ayah'],
+                'nama_ibu' => $this->formData['nama_ibu'],
+                'no_kk' => $this->formData['no_kk'],
+            ]);
+    
             FormSubmission::create([
                 'form_id' => $this->formModel->id,
+                'student_id' => $student->id,
                 'user_type' => $jenisPendaftar,
-                'submission_data' => array_merge(
-                    $this->formData,
-                    ['berkas_path' => $path]
-                ),
+                'submission_data' => $this->formData,
             ]);
 
-            // Siapkan data Student dari formData (hanya kolom yang diizinkan)
-            $fillable = (new Student())->getFillable();
-            $studentData = array_intersect_key($this->formData, array_flip($fillable));
-
-            // Map nomor_pendaftaran ke no_daftar bila tersedia
-            if (!isset($studentData['no_daftar']) && isset($this->formData['nomor_pendaftaran'])) {
-                $studentData['no_daftar'] = $this->formData['nomor_pendaftaran'];
-            }
-
-            // Set user_id bila user terautentikasi untuk memenuhi constraint FK
-            $userId = Auth::id();
-            if ($userId) {
-                $studentData['user_id'] = $userId;
-
-                // Opsional: jika ada kunci 'foto' di formData, gunakan; tidak, biarkan default/null
-                // studentData akan mengikuti kolom yang ada pada model Student
-
-                Student::create($studentData);
-            }
+            Registration::create([
+                'student_id' =>   $student->id,
+                'tgl_daftar' => now(),
+                'online' => true,
+                'status' => 'pending'
+            ]);
+            
         });
-
-        session()->flash('message', 'Pendaftaran Anda berhasil dikirim');
+    
+        session()->flash('message', "Pendaftaran Anda berhasil dikirim! Nomor Pendaftaran Anda adalah: **{$nomorPendaftaran}**. Silakan login menggunakan Nomor Pendaftaran dan NISN Anda.");
         $this->currentStep = $this->maxSteps + 2;
-        redirect()->route('registration.index');
     }
 
-    // Rules untuk Livewire validation
     public function rules()
     {
-        // Untuk step 1, kembalikan array kosong karena sudah divalidasi manual
         if ($this->currentStep === 1) {
             return [];
         }
         
-        // Untuk step lainnya, kembalikan rules dari validateCurrentStep logic
         $rules = [];
         $currentStepData = collect($this->formDefinition)->firstWhere('step_number', $this->currentStep);
         
@@ -211,7 +203,6 @@ class RegistrationSteps extends Component
         
         if ($this->currentStep == $this->maxSteps + 1) {
             $rules = array_merge($rules, [
-                'berkas_upload' => ['required', 'file', 'mimes:pdf,jpg,png', 'max:5120'],
                 'konfirmasi_data_sesuai' => ['required', 'accepted'],
             ]);
         }
@@ -219,7 +210,6 @@ class RegistrationSteps extends Component
         return $rules;
     }
 
-    // Computed property untuk memeriksa apakah step 1 valid
     public function getCanProceedFromStep1Property()
     {
         if ($this->currentStep !== 1) {

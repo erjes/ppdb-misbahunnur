@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegistrationsController;
+use App\Http\Controllers\RegistrationStepController;
+use App\Livewire\DocumentUpload;
 use App\Livewire\RegistrationSteps;
 use Illuminate\Support\Facades\Route;
 
@@ -18,19 +19,17 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
 });
 
 
 Route::get('/alur', fn() => view('option'))->name('alur');
 
 Route::prefix('siswa')->group(function () {
-    Route::get('/pendaftaran/{slug}', RegistrationSteps::class)->name('registration.form');
-    Route::get('/panel_siswa',[RegistrationsController::class, 'index'])->name('registration.index');
-    // Route::get('/daftar', fn() => view('livewire.pendaftaran-steps'))->name('daftar');
-    // Route::post('/pendaftaran', [RegistrationsController::class, 'store'])->name('pendaftaran.store');
-
-    Route::get('/login', fn() => view('siswa.login'))->name('login.siswa');
+    Route::get('/status', [RegistrationStepController::class, 'status'])->name('registration.status');
+    Route::get('/dokumen', DocumentUpload::class)->name('registration.documents');
+    
+    // 2. Tempatkan route dengan wildcard di akhir (agar tidak menimpa yang lain)
+    Route::get('/{slug}', RegistrationSteps::class)->name('registration.form');
 });
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

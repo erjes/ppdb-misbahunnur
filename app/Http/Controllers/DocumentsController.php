@@ -11,14 +11,11 @@ use Illuminate\Support\Facades\Storage;
 
 class DocumentsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $documents = Document::with('student')->latest()->paginate(15);
         
-        return view('documents.index', [
+        return view('admin.documents.index', [
             'documents' => $documents,
         ]);
     }
@@ -42,7 +39,7 @@ class DocumentsController extends Controller
             $document = Document::create($validated);
             
             return redirect()
-                ->route('documents.index')
+                ->route('admin.documents.index')
                 ->with('status', 'Dokumen berhasil ditambahkan');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menambah dokumen');
@@ -60,7 +57,7 @@ class DocumentsController extends Controller
             abort(404);
         }
         
-        return view('documents.show', [
+        return view('admin.documents.show', [
             'document' => $document,
         ]);
     }
@@ -94,7 +91,7 @@ class DocumentsController extends Controller
             $document->update($validated);
             
             return redirect()
-                ->route('documents.show', $document->id)
+                ->route('admin.documents.show', $document->id)
                 ->with('status', 'Dokumen berhasil diperbarui');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal memperbarui dokumen');
@@ -121,7 +118,7 @@ class DocumentsController extends Controller
             $document->delete();
             
             return redirect()
-                ->route('documents.index')
+                ->route('admin.documents.index')
                 ->with('status', 'Dokumen berhasil dihapus');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menghapus dokumen');

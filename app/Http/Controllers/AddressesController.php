@@ -16,7 +16,7 @@ class AddressesController extends Controller
     {
         $addresses = Address::with('student')->latest()->paginate(15);
         
-        return view('addresses.index', [
+        return view('admin.addresses.index', [
             'addresses' => $addresses,
         ]);
     }
@@ -32,7 +32,7 @@ class AddressesController extends Controller
             $address = Address::create($validated);
             
             return redirect()
-                ->route('addresses.index')
+                ->route('admin.addresses.index')
                 ->with('status', 'Alamat berhasil ditambahkan');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menambah alamat');
@@ -50,7 +50,7 @@ class AddressesController extends Controller
             abort(404);
         }
         
-        return view('addresses.show', [
+        return view('admin.addresses.show', [
             'address' => $address,
         ]);
     }
@@ -72,7 +72,7 @@ class AddressesController extends Controller
             $address->update($validated);
             
             return redirect()
-                ->route('addresses.show', $address->id)
+                ->route('admin.addresses.show', $address->id)
                 ->with('status', 'Alamat berhasil diperbarui');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal memperbarui alamat');
@@ -94,7 +94,7 @@ class AddressesController extends Controller
             $address->delete();
             
             return redirect()
-                ->route('addresses.index')
+                ->route('admin.addresses.index')
                 ->with('status', 'Alamat berhasil dihapus');
         } catch (\Throwable $e) {
             return back()->withErrors('Gagal menghapus alamat');
