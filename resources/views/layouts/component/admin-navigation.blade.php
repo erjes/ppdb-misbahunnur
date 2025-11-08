@@ -28,8 +28,11 @@
                 <x-nav-link href="{{ route('admin.registrations.list') }}" :active="request()->routeIs('admin.registration.list')">
                     <i class="fa-solid fa-shuffle"></i><span>Pendaftaran</span>
                 </x-nav-link>
-                <x-nav-link href="#" :active="request()->routeIs('#')">
-                    <i class="fa-solid fa-shuffle"></i><span>Siswa</span>
+                <x-nav-link href="{{ route('admin.students.mts') }}" :active="request()->routeIs('admin.students.mts')">
+                    <i class="fa-solid fa-shuffle"></i><span>MTS</span>
+                </x-nav-link>
+                <x-nav-link href="{{ route('admin.students.ma') }}" :active="request()->routeIs('admin.students.ma')">
+                    <i class="fa-solid fa-shuffle"></i><span>MA</span>
                 </x-nav-link>
                 <x-nav-link href="#" :active="request()->routeIs('#')">
                     <i class="fa-solid fa-shuffle"></i><span>Pembayaran</span>
