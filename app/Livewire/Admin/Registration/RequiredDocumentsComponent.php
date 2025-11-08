@@ -9,7 +9,7 @@ use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]
 
-class ListDocumentComponent extends Component
+class RequiredDocumentsComponent extends Component
 {
     public $student;
     public $documents = [];
@@ -27,7 +27,7 @@ class ListDocumentComponent extends Component
 
     public function render()
     {
-        return view('livewire.admin.registration.document', [
+        return view('livewire.admin.registration.documents', [
             'student' => $this->student,
             'documents' => $this->documents
         ]);

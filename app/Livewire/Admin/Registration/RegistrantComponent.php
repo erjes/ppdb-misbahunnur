@@ -7,7 +7,7 @@ use App\Models\Student;
 use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]  
-class ListComponent extends Component
+class RegistrantComponent extends Component
 {
     public $students;
 
@@ -18,7 +18,7 @@ class ListComponent extends Component
 
     public function render()
     {
-        return view('livewire.admin.registration.list', [
+        return view('livewire.admin.registration.registrant', [
             'students' => $this->students,
         ]);
     }

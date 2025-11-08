@@ -1,8 +1,8 @@
 <?php
 
-use App\Livewire\Admin\Registration\ListDocumentComponent;
+use App\Livewire\Admin\Registration\RequiredDocumentsComponent;
 use App\Livewire\Admin\Registration\DetailsComponent;
-use App\Livewire\Admin\Registration\ListComponent;
+use App\Livewire\Admin\Registration\RegistrantComponent;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'super_admin'])->prefix('super-admin')->group(function () {
@@ -12,9 +12,9 @@ Route::middleware(['auth', 'verified', 'super_admin'])->prefix('super-admin')->g
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     
     Route::prefix('admin')->group(function () {
-    Route::get('/pendaftaran', ListComponent::class)->name('admin.registrations.list');
+    Route::get('/pendaftaran', RegistrantComponent::class)->name('admin.registrations.list');
     Route::get('/pendaftaran/status/{nomor_pendaftaran}', DetailsComponent::class)->name('admin.registrations.status');
-    Route::get('/pendaftaran/dokumen/{nomor_pendaftaran}', ListDocumentComponent::class)->name('admin.registrations.documents');
+    Route::get('/pendaftaran/dokumen/{nomor_pendaftaran}', RequiredDocumentsComponent::class)->name('admin.registrations.documents');
     
 });
 

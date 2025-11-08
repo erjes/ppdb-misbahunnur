@@ -29,6 +29,9 @@
                     <i class="fa-solid fa-shuffle"></i><span>Pendaftaran</span>
                 </x-nav-link>
                 <x-nav-link href="#" :active="request()->routeIs('#')">
+                    <i class="fa-solid fa-shuffle"></i><span>Siswa</span>
+                </x-nav-link>
+                <x-nav-link href="#" :active="request()->routeIs('#')">
                     <i class="fa-solid fa-shuffle"></i><span>Pembayaran</span>
                 </x-nav-link>
             </div>
@@ -85,6 +88,9 @@
         <div class="pt-2 pb-3 space-y-1 text-white text-sm font-semibold">
             <x-responsive-nav-link href="{{ route('admin.registrations.list') }}" :active="request()->routeIs('admin.registrations.list')">
                 <i class="fa-solid fa-shuffle"></i> Pendaftaran
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
+                <i class="fa-solid fa-shuffle"></i> Siswa
             </x-responsive-nav-link>
             <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
                 <i class="fa-solid fa-shuffle"></i> Pembayaran
