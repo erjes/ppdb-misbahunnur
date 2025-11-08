@@ -25,7 +25,7 @@
             </div>
 
             <div class="hidden sm:flex items-center space-x-1 text-xs font-semibold text-white">
-                <x-nav-link href="{{ route('admin.registrations.list') }}" :active="request()->routeIs('admin.registration.list')">
+                <x-nav-link href="{{ route('admin.registrations.registrant') }}" :active="request()->routeIs('admin.registration.registrant')">
                     <i class="fa-solid fa-shuffle"></i><span>Pendaftaran</span>
                 </x-nav-link>
                 <x-nav-link href="{{ route('admin.students.mts') }}" :active="request()->routeIs('admin.students.mts')">
@@ -35,7 +35,16 @@
                     <i class="fa-solid fa-shuffle"></i><span>MA</span>
                 </x-nav-link>
                 <x-nav-link href="#" :active="request()->routeIs('#')">
+                    <i class="fa-solid fa-shuffle"></i><span>Nilai</span>
+                </x-nav-link>
+                <x-nav-link href="#" :active="request()->routeIs('#')">
                     <i class="fa-solid fa-shuffle"></i><span>Pembayaran</span>
+                </x-nav-link>
+                <x-nav-link href="#" :active="request()->routeIs('#')">
+                    <i class="fa-solid fa-shuffle"></i><span>Harga</span>
+                </x-nav-link>
+                <x-nav-link href="#" :active="request()->routeIs('#')">
+                    <i class="fa-solid fa-shuffle"></i><span>Riwayat Kesehatan</span>
                 </x-nav-link>
             </div>
 
@@ -89,7 +98,7 @@
 
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden bg-green-700 transition-all duration-500">
         <div class="pt-2 pb-3 space-y-1 text-white text-sm font-semibold">
-            <x-responsive-nav-link href="{{ route('admin.registrations.list') }}" :active="request()->routeIs('admin.registrations.list')">
+            <x-responsive-nav-link href="{{ route('admin.registrations.registrant') }}" :active="request()->routeIs('admin.registrations.registrant')">
                 <i class="fa-solid fa-shuffle"></i> Pendaftaran
             </x-responsive-nav-link>
             <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
@@ -97,6 +106,15 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
                 <i class="fa-solid fa-shuffle"></i> Pembayaran
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
+                <i class="fa-solid fa-shuffle"></i> Nilai
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
+                <i class="fa-solid fa-shuffle"></i> Harga
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
+                <i class="fa-solid fa-shuffle"></i> Riwayat Kesehatan
             </x-responsive-nav-link>
         </div>
 

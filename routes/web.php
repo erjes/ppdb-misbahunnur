@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Livewire\Student\Registration\DocumentComponent;
 use App\Livewire\Student\Registration\StatusComponent;
 use App\Livewire\Student\Registration\StepsComponent;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,13 +12,19 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    
+    if (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') {
+        return redirect()->route('admin.registrations.registrant');
+    }
+
+    if (Auth::user()->role === 'user') {
+        return redirect()->route('registration.status');
+    }
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
-
-
 Route::middleware(['auth'])->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -32,10 +39,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::prefix('pendaftaran')->group(function () {
+
     Route::get('/{slug}', StepsComponent::class)->name('registration.form');
+
 });
 
-// Route::get('/alur', fn() => view('option'))->name('alur');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

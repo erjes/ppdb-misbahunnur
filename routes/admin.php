@@ -19,7 +19,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::prefix('admin')->group(function () {
 
     Route::prefix('pendaftaran')->group(function () {
-        Route::get('/', RegistrantComponent::class)->name('admin.registrations.list');
+        Route::get('/', RegistrantComponent::class)->name('admin.registrations.registrant');
         Route::get('/status/{nomor_pendaftaran}', DetailsComponent::class)->name('admin.registrations.status');
         Route::get('/dokumen/{nomor_pendaftaran}', RequiredDocumentsComponent::class)->name('admin.registrations.documents');
     });

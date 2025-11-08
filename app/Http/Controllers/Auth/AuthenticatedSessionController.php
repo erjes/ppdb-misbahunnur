@@ -14,7 +14,13 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function student() : View
+    {
+        return view('auth.login-student');
+    }
+
+
+    public function create() : View
     {
         return view('auth.login');
     }
@@ -46,7 +52,7 @@ class AuthenticatedSessionController extends Controller
         session()->regenerate();
 
         if (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') {
-            return redirect()->intended(route('admin.registration.list', absolute: false));
+            return redirect()->intended(route('admin.registrations.registrant', absolute: false));
         }
 
         return redirect()->intended(route('home', absolute: false));
