@@ -94,13 +94,13 @@ class UpdateregistrationsRequest extends FormRequest
 
             // Registration meta
             'registration' => 'sometimes|array',
-            'registration.tgl_daftar' => 'sometimes|nullable|date',
-            'registration.tgl_konfirmasi' => 'sometimes|nullable|date|after_or_equal:registration.tgl_daftar',
+            'registration.tanggal_daftar' => 'sometimes|nullable|date',
+            'registration.tgl_konfirmasi' => 'sometimes|nullable|date|after_or_equal:registration.tanggal_daftar',
             'registration.is_confirmed' => 'sometimes|nullable|boolean',
             'registration.is_active' => 'sometimes|nullable|boolean',
             'registration.status' => 'sometimes|nullable|string|max:50',
             'registration.level' => 'sometimes|nullable|string|max:50',
-            'registration.tgl_keluar' => 'sometimes|nullable|date',
+            'registration.tanggal_keluar' => 'sometimes|nullable|date',
             'registration.alasan_keluar' => 'sometimes|nullable|string|max:255',
             'registration.online' => 'sometimes|nullable|boolean',
             'registration.is_paid' => 'sometimes|nullable|boolean',

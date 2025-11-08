@@ -1,23 +1,20 @@
 <?php
 
+
 namespace Database\Factories;
 
+use App\Models\Fees;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\fees>
- */
 class FeesFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = Fees::class;
+
+    public function definition()
     {
         return [
-            //
+            'nama_biaya' => $this->faker->word(),
+            'jumlah' => $this->faker->numberBetween(50000, 500000),
         ];
     }
 }

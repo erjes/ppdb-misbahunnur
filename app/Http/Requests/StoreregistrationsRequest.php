@@ -94,13 +94,13 @@ class StoreregistrationsRequest extends FormRequest
 
             // Registration meta
             'registration' => 'nullable|array',
-            'registration.tgl_daftar' => 'nullable|date',
-            'registration.tgl_konfirmasi' => 'nullable|date|after_or_equal:registration.tgl_daftar',
+            'registration.tanggal_daftar' => 'nullable|date',
+            'registration.tgl_konfirmasi' => 'nullable|date|after_or_equal:registration.tanggal_daftar',
             'registration.is_confirmed' => 'nullable|boolean',
             'registration.is_active' => 'nullable|boolean',
             'registration.status' => 'nullable|string|max:50',
             'registration.level' => 'nullable|string|max:50',
-            'registration.tgl_keluar' => 'nullable|date',
+            'registration.tanggal_keluar' => 'nullable|date',
             'registration.alasan_keluar' => 'nullable|string|max:255',
             'registration.online' => 'nullable|boolean',
             'registration.is_paid' => 'nullable|boolean',

@@ -50,4 +50,9 @@ class Student extends Model
     {
         return $this->hasOne(Registration::class);
     }
+
+    public function formSubmission()
+    {
+        return $this->hasOne(FormSubmission::class);
+    }
 }

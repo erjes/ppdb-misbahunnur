@@ -13,12 +13,15 @@
                     </h1>
                 </a>
                 <div class="hidden sm:flex items-center space-x-6 text-sm font-semibold">
-                    {{-- <x-nav-link href="" :active="request()->routeIs('')">
+                    <x-nav-link href="{{ route('registration.status') }}" :active="request()->routeIs('registration.status')">
                         <i class="fa-solid fa-shuffle"></i><span>Pendaftaran</span>
                     </x-nav-link>
-                    <x-nav-link href="" :active="request()->routeIs('')">
+                    <x-nav-link href="{{ route('registration.documents') }}" :active="request()->routeIs('registration.documents')">
                         <i class="fa-solid fa-shuffle"></i><span>Dokumen</span>
-                    </x-nav-link> --}}
+                    </x-nav-link>
+                    <x-nav-link href="#" :active="request()->routeIs('#')">
+                        <i class="fa-solid fa-shuffle"></i><span>Pembayaran</span>
+                    </x-nav-link>
                 </div>
             </div>
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -67,15 +70,15 @@
     </div>
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden bg-green-700 transition-all duration-500">
         <div class="pt-2 pb-3 space-y-1 text-white text-sm font-semibold">
-            {{-- <x-responsive-nav-link href="#alur" :active="request()->routeIs('#alur')">
-                <i class="fa-solid fa-shuffle"></i> ALUR
+            <x-responsive-nav-link href="{{ route('registration.status') }}" :active="request()->routeIs('registration.status')">
+                <i class="fa-solid fa-shuffle"></i> Pendaftaran
             </x-responsive-nav-link>
-            <x-responsive-nav-link href="#syarat" :active="request()->routeIs('#syarat')">
-                <i class="fa-solid fa-shuffle"></i> SYARAT
+            <x-responsive-nav-link href="{{ route('registration.documents') }}" :active="request()->routeIs('registration.document')">
+                <i class="fa-solid fa-shuffle"></i> Dokumen
             </x-responsive-nav-link>
-            <x-responsive-nav-link href="#kontak" :active="request()->routeIs('#kontak')">
-                <i class="fa-solid fa-shuffle"></i> KONTAK
-            </x-responsive-nav-link> --}}
+            <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
+                <i class="fa-solid fa-shuffle"></i> Pembayaran
+            </x-responsive-nav-link>
         </div>
         <div class="pt-4 pb-1 border-t border-green-500">
             @auth

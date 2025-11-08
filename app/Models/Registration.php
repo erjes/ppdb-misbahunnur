@@ -13,13 +13,14 @@ class Registration extends Model
 
     protected $fillable = [
         'student_id',
-        'tgl_daftar',
+        'tanggal_daftar',
         'tgl_konfirmasi',
         'is_confirmed',
         'is_active',
         'status',
-        'level',
-        'tgl_keluar',
+        'jenjang_daftar',
+        'jalur_daftar',
+        'tanggal_keluar',
         'alasan_keluar',
         'online',
         'is_paid',

@@ -25,29 +25,11 @@
             </div>
 
             <div class="hidden sm:flex items-center space-x-1 text-xs font-semibold text-white">
-                <x-nav-link :href="route('admin.students.index')" :active="request()->routeIs('admin.students.*')">
-                    <i class="fa-solid fa-user-graduate"></i> <span>SISWA</span>
+                <x-nav-link href="{{ route('admin.registrations.list') }}" :active="request()->routeIs('admin.registration.list')">
+                    <i class="fa-solid fa-shuffle"></i><span>Pendaftaran</span>
                 </x-nav-link>
-                <x-nav-link :href="route('admin.documents.index')" :active="request()->routeIs('admin.documents.*')">
-                    <i class="fa-solid fa-file-lines"></i> <span>DOKUMEN</span>
-                </x-nav-link>
-                <x-nav-link :href="route('admin.addresses.index')" :active="request()->routeIs('admin.addresses.*')">
-                    <i class="fa-solid fa-location-dot"></i> <span>ALAMAT</span>
-                </x-nav-link>
-                <x-nav-link :href="route('admin.audios.index')" :active="request()->routeIs('admin.audios.*')">
-                    <i class="fa-solid fa-headphones"></i> <span>AUDIO</span>
-                </x-nav-link>
-                <x-nav-link :href="route('admin.grades.index')" :active="request()->routeIs('admin.grades.*')">
-                    <i class="fa-solid fa-clipboard-check"></i> <span>NILAI</span>
-                </x-nav-link>
-                <x-nav-link :href="route('admin.health-records.index')" :active="request()->routeIs('admin.health_records.*')">
-                    <i class="fa-solid fa-notes-medical"></i> <span>KESEHATAN</span>
-                </x-nav-link>
-                <x-nav-link :href="route('admin.fees.index')" :active="request()->routeIs('admin.fees.*')">
-                    <i class="fa-solid fa-money-bill"></i> <span>BIAYA</span>
-                </x-nav-link>
-                <x-nav-link :href="route('admin.payments.index')" :active="request()->routeIs('admin.payments.*')">
-                    <i class="fa-solid fa-credit-card"></i> <span>PEMBAYARAN</span>
+                <x-nav-link href="#" :active="request()->routeIs('#')">
+                    <i class="fa-solid fa-shuffle"></i><span>Pembayaran</span>
                 </x-nav-link>
             </div>
 
@@ -101,29 +83,11 @@
 
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden bg-green-700 transition-all duration-500">
         <div class="pt-2 pb-3 space-y-1 text-white text-sm font-semibold">
-            <x-responsive-nav-link :href="route('admin.students.index')" :active="request()->routeIs('admin.students.*')">
-                <i class="fa-solid fa-user-graduate"></i> STUDENTS
+            <x-responsive-nav-link href="{{ route('admin.registrations.list') }}" :active="request()->routeIs('admin.registrations.list')">
+                <i class="fa-solid fa-shuffle"></i> Pendaftaran
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.documents.index')" :active="request()->routeIs('admin.documents.*')">
-                <i class="fa-solid fa-file-lines"></i> DOKUMEN
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.addresses.index')" :active="request()->routeIs('admin.addresses.*')">
-                <i class="fa-solid fa-location-dot"></i> ALAMAT
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.audios.index')" :active="request()->routeIs('admin.audios.*')">
-                <i class="fa-solid fa-headphones"></i> AUDIO
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.grades.index')" :active="request()->routeIs('admin.grades.*')">
-                <i class="fa-solid fa-clipboard-check"></i> NILAI
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.health-records.index')" :active="request()->routeIs('admin.health_records.*')">
-                <i class="fa-solid fa-notes-medical"></i> KESEHATAN
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.fees.index')" :active="request()->routeIs('admin.fees.*')">
-                <i class="fa-solid fa-money-bill"></i> BIAYA
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.payments.index')" :active="request()->routeIs('admin.payments.*')">
-                <i class="fa-solid fa-credit-card"></i> PEMBAYARAN
+            <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
+                <i class="fa-solid fa-shuffle"></i> Pembayaran
             </x-responsive-nav-link>
         </div>
 

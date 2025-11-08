@@ -24,7 +24,7 @@ return new class extends Migration
         Schema::create('form_submissions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('form_id')->constrained('forms')->onDelete('cascade');
-            $table->string('user_type')->nullable()->comment('Jenis Pengguna: SISWA MTS atau MA');
+            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->json('submission_data'); 
             $table->timestamps();
         });

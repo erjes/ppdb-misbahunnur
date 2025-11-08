@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
     
-    Route::get('/login-siswa', fn() => view('students.login'))->name('student.login');
+    Route::get('/login-siswa', fn() => view('auth.login-student'))->name('student.login');
     
     Route::post('/login-siswa', [AuthenticatedSessionController::class, 'authenticate'])
     ->name('student.authenticate');
