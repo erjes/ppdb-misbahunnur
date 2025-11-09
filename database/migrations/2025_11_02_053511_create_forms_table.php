@@ -27,6 +27,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->json('submission_data'); 
             $table->timestamps();
+            
         });
     }
 
