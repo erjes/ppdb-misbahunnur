@@ -7,6 +7,8 @@
                 <th>Nama Lengkap</th>
                 <th>Jenis Kelamin</th>
                 <th>Status Pendaftaran</th>
+                <th>Jenjang Pendaftaran</th>
+                <th>Jalur Pendaftaran</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -18,6 +20,8 @@
                     <td>{{ $student->nama_lengkap }}</td>
                     <td>{{ $student->jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan' }}</td>
                     <td>{{ $student->registration->status ?? 'Pending' }}</td>
+                    <td>{{ $student->registration->jenjang_daftar ?? 'Pending' }}</td>
+                    <td>{{ $student->registration->jalur_daftar ?? 'Pending' }}</td>
                     <td>
                         <a href="{{ route('admin.registrations.status', $student->nomor_pendaftaran) }}">Detail</a>
                         <a href="{{ route('admin.registrations.documents', $student->nomor_pendaftaran) }}">Dokumen</a>
