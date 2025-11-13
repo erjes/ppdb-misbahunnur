@@ -51,44 +51,39 @@ class StatusComponent extends Component
                 $submissionData = array_map(function ($value) {
                     return is_string($value) ? mb_convert_encoding($value, 'UTF-8', 'UTF-8') : $value;
                 }, $submissionData);
-
+    
                 // Remove any invalid UTF-8 characters that could cause issues
                 $submissionData = array_map(function ($value) {
                     return is_string($value) ? preg_replace('/[^\x20-\x7E]/', '', $value) : $value;
                 }, $submissionData);
-
-                // Now assign the data to class variables
+    
+                // Ensure parent data is loaded properly
                 $this->addressData = [
                     'alamat_lengkap' => $submissionData['alamat'] ?? 'Tidak tersedia',
                     'provinsi' => $submissionData['provinsi'] ?? 'Tidak tersedia',
                 ];
-        
+    
                 $this->parentData = [
-                    'ayah' => [
-                        'nama_lengkap' => $submissionData['nama_ayah'] ?? 'Tidak tersedia',
-                    ],
-                    'ibu' => [
-                        'nama_lengkap' => $submissionData['nama_ibu'] ?? 'Tidak tersedia',
-                    ],
+                    'nama_ayah' => $submissionData['nama_ayah'] ?? $studentData->nama_ayah ?? 'Tidak tersedia',
+                    'nama_ibu' => $submissionData['nama_ibu'] ?? $studentData->nama_ibu ?? 'Tidak tersedia',
                 ];
-        
+    
                 $this->schoolData = [
                     'nama' => $submissionData['nama_sekolah'] ?? 'Tidak tersedia',
                     'npsn' => $submissionData['npsn_sekolah'] ?? 'Tidak tersedia',
                     'jenjang' => $submissionData['jenjang_daftar'] ?? 'Tidak tersedia',
                 ];
             } else {
-                // Handle the case where submission_data is not valid
                 $this->addressData = [
                     'alamat_lengkap' => 'Tidak tersedia',
                     'provinsi' => 'Tidak tersedia',
                 ];
-        
+    
                 $this->parentData = [
-                    'ayah' => ['nama_lengkap' => 'Tidak tersedia'],
-                    'ibu' => ['nama_lengkap' => 'Tidak tersedia'],
+                    'nama_ayah' => $studentData->nama_ayah ?? 'Tidak tersedia',
+                    'nama_ibu' => $studentData->nama_ibu ?? 'Tidak tersedia',
                 ];
-        
+    
                 $this->schoolData = [
                     'nama' => 'Tidak tersedia',
                     'npsn' => 'Tidak tersedia',
@@ -97,13 +92,13 @@ class StatusComponent extends Component
             }
         }
     }
+    
 
     
     public function exportApprovedRegistration()
     {
         if ($this->registration && $this->registration->status == 'approved') {
             
-            // Clean all data before passing to PDF
             $cleanedData = $this->cleanDataForPdf([
                 'student' => $this->student,
                 'registration' => $this->registration,

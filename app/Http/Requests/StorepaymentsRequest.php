@@ -24,7 +24,7 @@ class StorepaymentsRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'fee_id' => 'required|exists:fees,id',
-            'kode_pembayaran' => 'nullable|string|max:100',
+            'bukti_pembayaran' => 'nullable|string|max:100',
             'jumlah' => 'required|numeric|min:0',
             'tanggal_bayar' => 'nullable|date',
             'bukti' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240', // 10MB max

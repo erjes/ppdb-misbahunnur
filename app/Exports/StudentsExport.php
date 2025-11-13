@@ -78,7 +78,7 @@ class StudentsExport implements FromQuery, WithHeadings, WithMapping
             $row->nomor_pendaftaran,
             $row->nama_lengkap,
             $row->nisn,
-            $row->nik_siswa,
+            (string)$row->nik_siswa,
             $row->reg_status,
             $row->is_paid ? 'Yes' : 'No',
             $row->jenjang_daftar,

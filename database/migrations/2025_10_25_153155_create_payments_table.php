@@ -10,10 +10,9 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('fee_id')->nullable()->constrained('fees')->onDelete('set null');
-            $table->string('kode_pembayaran')->unique();
-            $table->integer('jumlah');
-            $table->date('tanggal_bayar');
-            $table->string('bukti')->nullable();
+            $table->string('bukti_pembayaran')->nullable();
+            $table->date('tanggal_bayar')->nullable();
+            $table->string('bukti')->nullable()->nullable();
             $table->boolean('verifikasi')->default(false);
             $table->timestamps();
         });

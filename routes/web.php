@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Livewire\Student\Payment\PaymentComponent;
 use App\Livewire\Student\Registration\DocumentComponent;
 use App\Livewire\Student\Registration\StatusComponent;
 use App\Livewire\Student\Registration\StepsComponent;
@@ -30,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('siswa')->group(function () {
+        Route::get('/pembayaran/{bukti_pembayaran}/upload', PaymentComponent::class)->name('registration.payment.upload');
         Route::get('/status', StatusComponent::class)->name('registration.status');
         Route::get('/dokumen', DocumentComponent::class)->name('registration.documents');
         

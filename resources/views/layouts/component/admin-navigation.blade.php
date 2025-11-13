@@ -37,7 +37,7 @@
                 <x-nav-link href="#" :active="request()->routeIs('#')">
                     <i class="fa-solid fa-shuffle"></i><span>Nilai</span>
                 </x-nav-link>
-                <x-nav-link href="#" :active="request()->routeIs('#')">
+                <x-nav-link href="{{'admin.payments.list'}}" :active="request()->routeIs('admin.payments.list')">
                     <i class="fa-solid fa-shuffle"></i><span>Pembayaran</span>
                 </x-nav-link>
                 <x-nav-link href="#" :active="request()->routeIs('#')">

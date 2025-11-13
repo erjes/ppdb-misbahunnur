@@ -24,7 +24,7 @@ class UpdatepaymentsRequest extends FormRequest
         return [
             'user_id' => 'sometimes|exists:users,id',
             'fee_id' => 'sometimes|exists:fees,id',
-            'kode_pembayaran' => 'nullable|string|max:100',
+            'bukti_pembayaran' => 'nullable|string|max:100',
             'jumlah' => 'sometimes|numeric|min:0',
             'tanggal_bayar' => 'nullable|date',
             'bukti' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240', // 10MB max

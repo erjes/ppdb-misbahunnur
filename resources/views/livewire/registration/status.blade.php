@@ -33,6 +33,8 @@
         <button wire:click="exportApprovedRegistration">Export to PDF</button>
     @endif
 
+    <a href="{{ route('registration.payment.upload', $student->nomor_pendaftaran" target="_blank">Lihat Dokumen</a>
+
 @else
     <p>Data pendaftaran tidak ditemukan.</p>
 @endif

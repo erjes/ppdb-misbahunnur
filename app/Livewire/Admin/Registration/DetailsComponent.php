@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Registration;
 
 use App\Models\Student;
+use App\Models\Registration;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
@@ -15,6 +16,7 @@ class DetailsComponent extends Component
     public $registration;
     public $fees;
     public $payments;
+    public $newStatus; 
 
     public function mount($nomor_pendaftaran)
     {
@@ -29,11 +31,25 @@ class DetailsComponent extends Component
             ->firstOrFail();
 
         $this->registration = $this->student->registration;
-
         $this->payments = $this->student->user->payments;
         $this->fees = $this->payments->map(function ($payment) {
             return $payment->fees;
         });
+    }
+
+    public function updateStatus()
+    {
+        if (!in_array($this->newStatus, ['approved', 'rejected', 'pending'])) {
+            session()->flash('error', 'Status yang dipilih tidak valid.');
+            return;
+        }
+
+        $this->registration->status = $this->newStatus;
+        $this->registration->save();
+
+        $this->loadData();
+
+        session()->flash('message', 'Status pendaftaran berhasil diupdate!');
     }
 
     public function render()
@@ -42,7 +58,7 @@ class DetailsComponent extends Component
             'student' => $this->student,
             'registration' => $this->registration,
             'fees' => $this->fees,
-            'payments' => $this->payments
+            'payments' => $this->payments,
         ]);
     }
 }

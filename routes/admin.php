@@ -1,6 +1,8 @@
 <?php
 
 use App\Exports\StudentsExport;
+use App\Livewire\Admin\Payment\PaymentListComponent;
+use App\Livewire\Admin\Payment\PaymentVerificationComponent;
 use App\Livewire\Admin\Registration\RequiredDocumentsComponent;
 use App\Livewire\Admin\Registration\DetailsComponent;
 use App\Livewire\Admin\Registration\RegistrantComponent;
@@ -22,6 +24,11 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         Route::get('/', RegistrantComponent::class)->name('admin.registrations.registrant');
         Route::get('/status/{nomor_pendaftaran}', DetailsComponent::class)->name('admin.registrations.status');
         Route::get('/dokumen/{nomor_pendaftaran}', RequiredDocumentsComponent::class)->name('admin.registrations.documents');
+    });
+
+    Route::prefix('pembayaran')->group(function () {
+        Route::get('/', PaymentListComponent::class)->name('admin.payments.list');
+        Route::get('pembayaran/{paymentId}/verifikasi', PaymentVerificationComponent::class)->name('admin.payments.verify');
     });
 
     Route::prefix('siswa')->group(function () {

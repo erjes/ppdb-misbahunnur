@@ -14,7 +14,7 @@ class Payment extends Model
     protected $fillable = [
         'user_id',
         'fee_id',
-        'kode_pembayaran',
+        'bukti_pembayaran',
         'jumlah',
         'tanggal_bayar',
         'bukti',

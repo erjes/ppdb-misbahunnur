@@ -205,12 +205,12 @@
                 <td>: {{ $student->nomor_pendaftaran ?? 'Data tidak tersedia' }}</td>
             </tr>
             <tr>
-                <td>NISM</td>
-                <td>: {{ $student->nism ?? 'Data tidak tersedia' }}</td>
+                <td>NISN</td>
+                <td>: {{ $student->nisn ?? 'Data tidak tersedia' }}</td>
             </tr>
             <tr>
                 <td>NIK</td>
-                <td>: {{ $student->nik ?? 'Data tidak tersedia' }}</td>
+                <td>: {{ $student->nik_siswa ?? 'Data tidak tersedia' }}</td>
             </tr>
             <tr>
                 <td>NAMA LENGKAP</td>
@@ -250,12 +250,12 @@
             </tr>
             <tr>
                 <td>AYAH</td>
-                <td>: {{ $parentData['ayah']['nama_lengkap'] ?? 'Data tidak tersedia' }}</td>
+                <td>: {{ $parentData['nama_ayah'] ?? 'Data tidak tersedia' }}</td>
             </tr>
             <tr>
                 <td>IBU</td>
-                <td>: {{ $parentData['ibu']['nama_lengkap'] ?? 'Data tidak tersedia' }}</td>
-            </tr>
+                <td>: {{ $parentData['nama_ibu'] ?? 'Data tidak tersedia' }}</td>
+            </tr>               
             <tr>
                 <td>ASAL SEKOLAH</td>
                 <td>: {{ $schoolData['nama'] ?? 'Data tidak tersedia' }}</td>

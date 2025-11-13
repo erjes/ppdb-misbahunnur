@@ -6,9 +6,11 @@ use App\Enums\UserRole;
 use Livewire\Component;
 use App\Models\Form;
 use App\Models\FormSubmission;
+use App\Models\Payment;
 use App\Models\Registration;
 use App\Models\Student;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -225,6 +227,11 @@ class StepsComponent extends Component
                 'form_id' => $this->formModel->id,
                 'student_id' => $student->id,
                 'submission_data' => $this->formData,
+            ]);
+
+            Payment::create([
+                'user_id' => Auth::id(),
+                'bukti_pembayaran' => $nomorPendaftaran,
             ]);
 
             Registration::create([

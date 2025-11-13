@@ -19,6 +19,14 @@
             <td><strong>Jenis Kelamin</strong></td>
             <td>{{ $student->jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan' }}</td>
         </tr>
+        <tr>
+            <td><strong>Jalur Daftar</strong></td>
+            <td>{{ $student->registration->jalur_daftar }}</td>
+        </tr>
+        <tr>
+            <td><strong>Jenjang Daftar</strong></td>
+            <td>{{ $student->registration->jenjang_daftar }}</td>
+        </tr>
     </table>
 
     <h3>Status Pendaftaran</h3>
@@ -32,6 +40,17 @@
             <td>{{ \Carbon\Carbon::parse($registration->tanggal_daftar)->format('d F Y') }}</td>
         </tr>
     </table>
+
+    <h3>Update Status Pendaftaran</h3>
+    <form wire:submit.prevent="updateStatus">
+        <select wire:model="newStatus" required>
+            <option value="">Pilih Status</option>
+            <option value="approved">Diterima</option>
+            <option value="rejected">Ditolak</option>
+            <option value="pending">Menunggu</option>
+        </select>
+        <button type="submit">Update Status</button>
+    </form>
 
     <h3>Biaya Pendaftaran</h3>
     <table border="1" cellpadding="10">
