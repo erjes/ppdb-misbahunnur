@@ -2,3 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 @tailwind variants;
+
+.sidebar {
+    transition: all 0.3s ease;
+}
+
+.sidebar-collapsed {
+    width: 64px;
+}
+
+.sidebar-expanded {
+    width: 250px;
+}
+
+.content-expanded {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+}
+
+.content-collapsed {
+    margin-left: 64px;
+    width: calc(100% - 64px);
+}
+
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        height: 100vh;
+    }
+    
+    .sidebar-mobile-open {
+        transform: translateX(0);
+    }
+    
+    .content-expanded,
+    .content-collapsed {
+        margin-left: 0;
+        width: 100%;
+    }
+}
