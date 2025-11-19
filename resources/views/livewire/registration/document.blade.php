@@ -77,7 +77,7 @@
             </div>
         @endif
 
-        @if ($jalurDaftar == 'Dhuafa' || $jalurDaftar == 'Prestasi')
+        @if ($jalurDaftar == 'Dhuafa' || $jalurDaftar == 'Beasiswa')
             <div wire:key="dok-prestasi-dhuafa">
                 <h3>Dokumen {{ $jalurDaftar }} (Wajib)</h3>
 

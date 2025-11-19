@@ -4,49 +4,55 @@ namespace App\Livewire\Student\Payment;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\Document;
 use App\Models\Payment;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Student;
+use App\Models\Fees;
+use Livewire\Attributes\Layout;
 
+#[Layout('layouts.app')] 
 class PaymentComponent extends Component
 {
     use WithFileUploads;
 
     public $paymentProof; 
-    public $paymentCode; 
+    public $studentId;     
+    public $student;        
     public $jenis_dokumen = 'Bukti Pembayaran'; 
+
+    public $feeId = 1;
 
     protected $rules = [
         'paymentProof' => 'required|mimes:jpg,jpeg,png,pdf|max:2048', 
     ];
 
-    public function mount($paymentCode)
+    public function mount($studentId)
     {
-        $this->paymentCode = $paymentCode;
+        $this->student   = Student::where('id', $studentId)->firstOrFail();
+        $this->studentId = $this->student->id;
     }
 
     public function submitPaymentProof()
     {
         $this->validate();
 
-        $payment = Payment::find($this->paymentCode);
+        $fee = Fees::findOrFail($this->feeId);
 
-        if (!$payment) {
-            session()->flash('error', 'Pembayaran tidak ditemukan.');
-            return;
-        }
+        $fileName = time().'_'.$this->paymentProof->getClientOriginalName();
+        $folder   = 'payments/'.$this->studentId;
 
-        if ($payment->is_paid) {
-            session()->flash('error', 'Pembayaran sudah terverifikasi!');
-            return;
-        }
- 
-        $filePath = $this->paymentProof->store('payments', 'public');
+        $this->paymentProof->storeAs(
+            $folder,
+            $fileName,
+            'private'
+        );
 
-        $payment->user_id = Auth::id();
-        $payment->paymentCode;
-        $payment->bukti = $filePath;
+        $payment = new Payment();
+        $payment->fee_id           = $fee->id;
+        $payment->jumlah           = $fee->jumlah;      
+        $payment->student_id       = $this->studentId;
+        $payment->bukti_pembayaran = $fileName;
+        $payment->tanggal_bayar    = now();
+        $payment->verifikasi       = 0;
         $payment->save();
 
         session()->flash('message', 'Bukti pembayaran berhasil dikirim! Menunggu verifikasi.');
@@ -56,6 +62,8 @@ class PaymentComponent extends Component
 
     public function render()
     {
-        return view('livewire.payment.upload');
+        return view('livewire.payment.upload', [
+            'student' => $this->student,
+        ]);
     }
 }

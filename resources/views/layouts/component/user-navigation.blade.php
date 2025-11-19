@@ -19,9 +19,9 @@
                     <x-nav-link href="{{ route('registration.documents') }}" :active="request()->routeIs('registration.documents')">
                         <i class="fa-solid fa-shuffle"></i><span>Dokumen</span>
                     </x-nav-link>
-                    <x-nav-link href="#" :active="request()->routeIs('#')">
+                    {{-- <x-nav-link href="#" :active="request()->routeIs('#')">
                         <i class="fa-solid fa-shuffle"></i><span>Pembayaran</span>
-                    </x-nav-link>
+                    </x-nav-link> --}}
                 </div>
             </div>
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -76,9 +76,9 @@
             <x-responsive-nav-link href="{{ route('registration.documents') }}" :active="request()->routeIs('registration.document')">
                 <i class="fa-solid fa-shuffle"></i> Dokumen
             </x-responsive-nav-link>
-            <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
+            {{-- <x-responsive-nav-link href="#" :active="request()->routeIs('#')">
                 <i class="fa-solid fa-shuffle"></i> Pembayaran
-            </x-responsive-nav-link>
+            </x-responsive-nav-link> --}}
         </div>
         <div class="pt-4 pb-1 border-t border-green-500">
             @auth

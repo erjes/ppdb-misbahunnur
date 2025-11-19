@@ -1,6 +1,5 @@
 <div>
     <h2>Upload Bukti Pembayaran</h2>
-
     <form wire:submit.prevent="submitPaymentProof" enctype="multipart/form-data">
         <div class="form-group">
             <label for="paymentProof">Bukti Pembayaran</label>
@@ -19,12 +18,6 @@
     @if (session()->has('message'))
         <div class="alert alert-success mt-3">
             {{ session('message') }}
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="alert alert-danger mt-3">
-            {{ session('error') }}
         </div>
     @endif
 </div>

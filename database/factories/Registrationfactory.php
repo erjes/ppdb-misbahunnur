@@ -16,6 +16,8 @@ class RegistrationFactory extends Factory
             'student_id' => Student::factory(),
             'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
             'tanggal_daftar' => $this->faker->date(),
+            'gelombang' => rand(1,3),
+            'tahun' => (string) rand(2024, 2025),
             'jalur_daftar' => $this->faker->randomElement(['Reguler', 'Beasiswa']),
             'jenjang_daftar' => $this->faker->randomElement(['MA', 'MTS']),
         ];

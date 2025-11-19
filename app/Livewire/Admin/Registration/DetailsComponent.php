@@ -8,57 +8,45 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]  
-
 class DetailsComponent extends Component
 {
-    public $nomor_pendaftaran;
+    public $studentId;
     public $student;
     public $registration;
     public $fees;
     public $payments;
     public $newStatus; 
 
-    public function mount($nomor_pendaftaran)
+    public function mount($studentId)
     {
-        $this->nomor_pendaftaran = $nomor_pendaftaran;
+        $this->studentId = $studentId;
         $this->loadData();
     }
 
     public function loadData()
     {
-        $this->student = Student::where('nomor_pendaftaran', $this->nomor_pendaftaran)
-            ->with(['user.payments.fees', 'user.payments'])
+
+        $this->student = Student::with(['registration', 'payments.fee'])
+            ->where('id', $this->studentId)   
             ->firstOrFail();
 
         $this->registration = $this->student->registration;
-        $this->payments = $this->student->user->payments;
+        $this->payments     = $this->student->payments;
+
         $this->fees = $this->payments->map(function ($payment) {
-            return $payment->fees;
+            return $payment->fee;
         });
-    }
 
-    public function updateStatus()
-    {
-        if (!in_array($this->newStatus, ['approved', 'rejected', 'pending'])) {
-            session()->flash('error', 'Status yang dipilih tidak valid.');
-            return;
-        }
-
-        $this->registration->status = $this->newStatus;
-        $this->registration->save();
-
-        $this->loadData();
-
-        session()->flash('message', 'Status pendaftaran berhasil diupdate!');
+        $this->newStatus = $this->registration->status;
     }
 
     public function render()
     {
         return view('livewire.admin.registration.details', [
-            'student' => $this->student,
+            'student'      => $this->student,
             'registration' => $this->registration,
-            'fees' => $this->fees,
-            'payments' => $this->payments,
+            'fees'         => $this->fees,
+            'payments'     => $this->payments,
         ]);
     }
 }

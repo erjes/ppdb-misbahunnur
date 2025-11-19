@@ -48,14 +48,15 @@ class DatabaseSeeder extends Seeder
                 Registration::factory()->create([
                     'student_id' => $student->id,
                 ]);
+                Payment::factory()->create([
+                    'student_id' => $student->id,
+                ]);
                 FormSubmission::factory()->create([
                     'student_id' => $student->id,
                 ]);
             }
         });
 
-        Fees::factory(5)->create();
-        Payment::factory(5)->create();
-
+        Fees::factory()->create();
     }
 }

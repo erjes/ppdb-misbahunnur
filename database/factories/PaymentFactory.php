@@ -14,9 +14,8 @@ class PaymentFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
             'fee_id' => Fees::factory(),
-            'jumlah' => $this->faker->numberBetween(50000, 500000),
+            'jumlah' => 300000,
             'bukti_pembayaran' => $this->faker->numerify('#############'),
             'tanggal_bayar' => $this->faker->date(),
             'verifikasi' => $this->faker->boolean(),

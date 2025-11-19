@@ -51,7 +51,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         session()->regenerate();
 
-        if (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') {
+        if (Auth::user()->role === 'admin_mts' || Auth::user()->role === 'admin_ma') {
             return redirect()->intended(route('admin.registrations.registrant', absolute: false));
         }
 

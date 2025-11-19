@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('type')->nullable();
+            $table->unsignedSmallInteger('tahun')->nullable();      // contoh: 2025
+            $table->unsignedTinyInteger('gelombang_aktif')->default(1)->nullable(); // gelombang pendaftaran aktif
+            $table->boolean('is_open')->default(true)->nullable();
             $table->json('form_steps');
             $table->timestamps();
         });

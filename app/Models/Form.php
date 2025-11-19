@@ -13,6 +13,9 @@ class Form extends Model
         'name',
         'slug',
         'type',
+        'tahun',
+        'gelombang_aktif',
+        'is_open',
         'form_steps',
     ];
 

@@ -4,22 +4,35 @@ namespace App\Livewire\Admin\Payment;
 
 use Livewire\Component;
 use App\Models\Payment;
+use App\Models\Registration;
+use Livewire\Attributes\Layout;
+
+#[Layout('layouts.app')] 
 
 class PaymentVerificationComponent extends Component
 {
     public $payment;
-    public $isPaid;
+    public $registration;
+    public $verifikasi;
 
-    public function mount($paymentId)
+    public function mount($studentId)
     {
-        $this->payment = Payment::findOrFail($paymentId);
-        $this->isPaid = $this->payment->is_paid;
+        $this->payment = Payment::where('student_id', $studentId)
+        ->latest()
+        ->firstOrFail();
+
+        $this->registration = Registration::where('student_id', $studentId)
+        ->firstOrFail();
+        $this->verifikasi = $this->payment->verifikasi; 
     }
 
     public function updatePaymentStatus()
     {
-        $this->payment->is_paid = $this->isPaid;
-        $this->payment->save();
+        $this->payment->verifikasi = $this->verifikasi;
+        $this->payment->save(); 
+
+        $this->registration->is_paid = $this->verifikasi;  
+        $this->registration->save();  
 
         session()->flash('message', 'Status pembayaran berhasil diperbarui.');
     }

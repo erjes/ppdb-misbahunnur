@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\LetterSetting;
 use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]
@@ -92,28 +93,70 @@ class StatusComponent extends Component
             }
         }
     }
-    
-
-    
+ 
     public function exportApprovedRegistration()
     {
         if ($this->registration && $this->registration->status == 'approved') {
             
-            $cleanedData = $this->cleanDataForPdf([
+            $studentData = $this->cleanDataForPdf([
                 'student' => $this->student,
                 'registration' => $this->registration,
                 'addressData' => $this->addressData,
                 'parentData' => $this->parentData,
                 'schoolData' => $this->schoolData,
             ]);
-    
-            $pdf = PDF::loadView('pdf.registration_approved', $cleanedData);
+
+            $letterSetting = LetterSetting::first();
+
+            $letterData = [
+                'sk_number' => '...',
+                'date' => date('d F Y'),
+                'school_year' => date('Y').'-'.(date('Y')+1),
+                'signer_name' => 'Panitia',
+                'signer_title' => 'Ketua Panitia',
+                'menimbang' => [],
+                'memperhatikan' => [],
+                'payment_deadline_1_start' => '-',
+                'payment_deadline_1_end' => '-',
+                'payment_deadline_2_end' => '-',
+                'bank_account_info' => '-',
+                'signature' => null,
+                'stamp' => null,
+                'city' => 'Cimahi' 
+            ];
+
+            if ($letterSetting) {
+                $sigPath = $letterSetting->signature_path ? public_path('storage/' . str_replace('public/', '', $letterSetting->signature_path)) : null;
+                $stampPath = $letterSetting->stamp_path ? public_path('storage/' . str_replace('public/', '', $letterSetting->stamp_path)) : null;
+
+                $letterData = [
+                    'sk_number' => $letterSetting->sk_number,
+                    'date' => $letterSetting->date_string,
+                    'school_year' => $letterSetting->school_year,
+                    'signer_name' => $letterSetting->signer_name,
+                    'signer_title' => $letterSetting->signer_title,
+                    'menimbang' => explode("\n", $letterSetting->menimbang), 
+                    'memperhatikan' => explode("\n", $letterSetting->memperhatikan),
+                    'payment_deadline_1_start' => $letterSetting->payment_start,
+                    'payment_deadline_1_end' => $letterSetting->payment_end_1,
+                    'payment_deadline_2_end' => $letterSetting->payment_end_2,
+                    'bank_account_info' => $letterSetting->bank_info,
+                    'signature' => $sigPath,
+                    'stamp' => $stampPath,
+                    'city' => 'Cimahi'
+                ];
+            }
+
+            $finalData = array_merge($studentData, $letterData);
+
+            $pdf = PDF::loadView('pdf.registration_approved', $finalData);
+            $pdf->setPaper('a4', 'portrait'); 
             
             return response()->streamDownload(
                 function () use ($pdf) {
-                    echo $pdf->stream();
+                    echo $pdf->output();
                 },
-                'surat_pengumuman_ppdb.pdf'
+                'Surat_Keputusan_' . preg_replace('/[^A-Za-z0-9\-]/', '', $this->student->name ?? 'Siswa') . '.pdf'
             );
         }
     
@@ -124,14 +167,11 @@ class StatusComponent extends Component
     {
         array_walk_recursive($data, function (&$value, $key) {
             if (is_string($value)) {
-                // Remove invalid UTF-8 characters
                 $value = mb_convert_encoding($value, 'UTF-8', 'UTF-8');
                 $value = preg_replace('/[^\x{0009}\x{000A}\x{000D}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', '', $value);
                 
-                // Alternative: Use iconv for more aggressive cleaning
                 $value = iconv('UTF-8', 'UTF-8//IGNORE', $value);
                 
-                // Trim and ensure it's not empty
                 $value = trim($value);
                 if (empty($value)) {
                     $value = 'Tidak tersedia';

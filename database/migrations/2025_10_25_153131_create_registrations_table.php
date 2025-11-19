@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->string('status')->nullable(); // diterima, pending, ditolak
             $table->string('jenjang_daftar');
             $table->string('jalur_daftar');
+            $table->string('tahun'); 
+            $table->string('gelombang'); 
             $table->date('tanggal_keluar')->nullable();
             $table->string('alasan_keluar')->nullable();
             $table->boolean('online')->default(true);

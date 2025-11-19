@@ -5,6 +5,9 @@ namespace App\Livewire\Admin\Payment;
 use Livewire\Component;
 use App\Models\Payment;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+
+#[Layout('layouts.app')] 
 
 class PaymentListComponent extends Component
 {
@@ -23,10 +26,11 @@ class PaymentListComponent extends Component
     public function render()
     {
         $payments = Payment::query()
-            ->where('user_id', 'like', '%' . $this->search . '%')
-            ->orWhere('nomor_pendaftaran', 'like', '%' . $this->search . '%')
-            ->orWhere('nisn', 'like', '%' . $this->search . '%')
-            ->orWhere('nama_lengkap', 'like', '%' . $this->search . '%')
+            ->whereHas('student', function ($query) {
+                $query->where('nomor_pendaftaran', 'like', '%' . $this->search . '%')
+                    ->orWhere('nisn', 'like', '%' . $this->search . '%')
+                    ->orWhere('nama_lengkap', 'like', '%' . $this->search . '%');
+            })
             ->paginate($this->perPage);
 
         return view('livewire.admin.payment.list', [

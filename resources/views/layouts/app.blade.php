@@ -17,6 +17,7 @@
 
   <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
 
+
   @filamentStyles
   @vite('resources/css/app.css')
 
@@ -66,13 +67,15 @@
 <body class="font-sans antialiased text-gray-800 bg-white">
   <div class="min-h-screen flex">
     @auth
-      @if (Auth::user()->role === 'admin')
+      @if (Auth::user()->role === 'admin_mts' || Auth::user()->role === 'admin_ma')
         @include('layouts.component.admin-sidebar')
       @else
-        @include('layouts.component.user-sidebar')
+        @include('layouts.component.user-navigation')
+        {{-- @include('layouts.component.user-sidebar') --}}
       @endif
     @else
-      @include('layouts.component.user-sidebar')
+      @include('layouts.component.user-navigation')
+      {{-- @include('layouts.component.user-sidebar') --}}
     @endauth
 
     <div class="flex-1 flex flex-col">
@@ -105,7 +108,8 @@
                 </x-dropdown-link>
                 <form method="POST" action="{{ route('logout') }}">
                   @csrf
-                  <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                  <x-dropdown-link :href="route('logout')"
+                    onclick="event.preventDefault(); this.closest('form').submit();">
                     <i class="fa-solid fa-right-from-bracket mr-2"></i>Log Out
                   </x-dropdown-link>
                 </form>

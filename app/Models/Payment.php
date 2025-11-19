@@ -12,18 +12,17 @@ class Payment extends Model
     protected $table = 'payments';
 
     protected $fillable = [
-        'user_id',
+        'student_id',
         'fee_id',
         'bukti_pembayaran',
         'jumlah',
         'tanggal_bayar',
-        'bukti',
         'verifikasi',
     ];
 
-    public function user()
+    public function student()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Student::class);
     }
 
 

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Livewire\Admin\Content\HomeComponent;
+use App\Livewire\Admin\Content\VideoComponent;
 use App\Livewire\Student\Payment\PaymentComponent;
 use App\Livewire\Student\Registration\DocumentComponent;
 use App\Livewire\Student\Registration\StatusComponent;
@@ -8,13 +10,11 @@ use App\Livewire\Student\Registration\StepsComponent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/',HomeComponent::class)->name('home');
 
 Route::get('/dashboard', function () {
     
-    if (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') {
+    if (Auth::user()->role === 'admin_mts' || Auth::user()->role === 'admin_ma') {
         return redirect()->route('admin.registrations.registrant');
     }
 
@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('siswa')->group(function () {
-        Route::get('/pembayaran/{bukti_pembayaran}/upload', PaymentComponent::class)->name('registration.payment.upload');
+        Route::get('/pembayaran/{studentId}/upload', PaymentComponent::class)->name('registration.payment.upload');
         Route::get('/status', StatusComponent::class)->name('registration.status');
         Route::get('/dokumen', DocumentComponent::class)->name('registration.documents');
         
@@ -45,6 +45,16 @@ Route::prefix('pendaftaran')->group(function () {
     Route::get('/{slug}', StepsComponent::class)->name('registration.form');
 
 });
+
+Route::get('/video/{filename}', function ($filename) {
+    $filePath = storage_path("app/private/videos/{$filename}");
+
+    if (file_exists($filePath)) {
+        return response()->file($filePath);
+    }
+
+    abort(404);
+})->name('admin.videos.show');
 
 
 require __DIR__.'/auth.php';

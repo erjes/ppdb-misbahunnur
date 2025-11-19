@@ -8,7 +8,7 @@
             <tr>
                 <th>No. Pendaftaran</th>
                 <th>Nama</th>
-                <th>Bukti Pembayaran</th>
+                <th>Jenjang</th>
                 <th>Status Pembayaran</th>
                 <th>Aksi</th>
             </tr>
@@ -18,10 +18,12 @@
                 <tr>
                     <td>{{ $payment->student->nomor_pendaftaran }}</td>
                     <td>{{ $payment->student->nama_lengkap }}</td>
-                    <td><a href="{{ asset('storage/payments/' . $payment->file_path) }}" target="_blank">Lihat Bukti</a></td>
-                    <td>{{ $payment->is_paid ? 'Terverifikasi' : 'Belum Terverifikasi' }}</td>
+                    {{-- <td>
+                      <a href="{{ route('admin.payments.show', ['studentId' => $payment->student_id, 'filename' => basename($payment->bukti_pembayaran)]) }}" target="_blank">Lihat Dokumen</a>
+                    </td> --}}
+                    <td>{{ $payment->verifikasi ? 'Terverifikasi' : 'Menunggu' }}</td>
                     <td>
-                        <a href="{{ route('admin.payments.verify', $payment->id) }}" class="btn btn-primary">Verifikasi</a>
+                        <a href="{{ route('admin.payments.verify', $payment->student_id) }}" class="btn btn-primary">Verifikasi</a>
                     </td>
                 </tr>
             @empty

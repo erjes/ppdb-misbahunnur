@@ -10,11 +10,12 @@ use App\Models\Payment;
 use App\Models\Registration;
 use App\Models\Student;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
+
+use function Symfony\Component\Clock\now;
 
 #[Layout('layouts.guest')]
 
@@ -30,6 +31,34 @@ class StepsComponent extends Component
     public $konfirmasi_data_sesuai = false;
     public $setuju_ketentuan = false;
 
+    
+    public function mount($slug = 'ppdb-online')
+    {
+
+        
+        $this->formModel = Form::where('slug', $slug)->firstOrFail();
+        $formSteps = $this->formModel->form_steps;
+        
+        if (! $this->formModel->is_open) {
+            abort(403, 'Pendaftaran sedang ditutup.');
+        }
+        
+        $this->formDefinition = is_string($formSteps) ? json_decode($formSteps, true) : $formSteps;
+        
+        if (!is_array($this->formDefinition)) {
+            $this->formDefinition = [];
+        }
+        
+        $this->maxSteps = count($this->formDefinition);
+        
+        foreach ($this->formDefinition as $step) {
+            foreach ($step['fields'] as $field) {
+                $this->formData[$field['name']] = ($field['type'] === 'select') ? '' : null;
+            }
+        }
+        
+        $this->generateNomorPendaftaran();
+    }
 
     protected function getNomorUrutPendaftaran(string $prefix): string
     {
@@ -47,46 +76,36 @@ class StepsComponent extends Component
                 $nextNumber = $lastNumber + 1;
             }
 
-            return sprintf("%03d", $nextNumber);
+            return sprintf("%04d", $nextNumber);
         });
     }
     
-    public function mount($slug = 'ppdb-online')
-    {
-        $this->formModel = Form::where('slug', $slug)->firstOrFail();
-        $formSteps = $this->formModel->form_steps;
-        
-        $this->formDefinition = is_string($formSteps) ? json_decode($formSteps, true) : $formSteps;
-    
-        if (!is_array($this->formDefinition)) {
-            $this->formDefinition = [];
-        }
-
-        $this->maxSteps = count($this->formDefinition);
-        
-        foreach ($this->formDefinition as $step) {
-            foreach ($step['fields'] as $field) {
-                $this->formData[$field['name']] = ($field['type'] === 'select') ? '' : null;
-            }
-        }
-
-        $this->generateNomorPendaftaran();
-    }
-
     public function generateNomorPendaftaran()
     {
-        $jenjang = $this->formData['jenjang_daftar'] ?? '';
+        $jenjang     = $this->formData['jenjang_daftar'] ?? '';
         $jalur_input = $this->formData['jalur_daftar'] ?? '';
-        
+    
         if (empty($jenjang) || empty($jalur_input)) {
             $this->formData['nomor_pendaftaran'] = 'Tunggu Pilihan Jenjang';
             return;
         }
-
-        $tahun = substr(date('Y'), -2);
-        $gelombang = $this->formData['gelombang'];
+    
+        $tahun = substr($this->formModel->tahun ?? date('Y'), -2);
+    
+        $gelombang = $this->formData['gelombang'] ?? null;
+    
+        if (empty($gelombang)) {
+            $gelField = collect($this->formDefinition[0]['fields'] ?? [])
+                ->firstWhere('name', 'gelombang');
+    
+            if ($gelField && isset($gelField['value'])) {
+                $gelombang = $gelField['value'];
+                $this->formData['gelombang'] = $gelombang;
+            }
+        }
+    
         $kode_jalur = '';
-        
+    
         if ($jalur_input == 'Reguler') {
             $kode_jalur = 'A';
         } elseif ($jalur_input == 'Yatim' || $jalur_input == 'Dhuafa') {
@@ -94,15 +113,16 @@ class StepsComponent extends Component
         } elseif ($jalur_input == 'Prestasi') {
             $kode_jalur = 'C';
         } else {
-            $kode_jalur = 'A'; 
+            $kode_jalur = 'A';
         }
-        
+    
         $komponen_awal = $tahun . $gelombang . $jenjang . $kode_jalur;
-        $nomor_urut = $this->getNomorUrutPendaftaran($komponen_awal);
+        $nomor_urut    = $this->getNomorUrutPendaftaran($komponen_awal);
         $nomor_pendaftaran_lengkap = $komponen_awal . $nomor_urut;
-        
+    
         $this->formData['nomor_pendaftaran'] = $nomor_pendaftaran_lengkap;
     }
+    
 
     public function updated($property, $value)
     {
@@ -229,20 +249,32 @@ class StepsComponent extends Component
                 'submission_data' => $this->formData,
             ]);
 
-            Payment::create([
-                'user_id' => Auth::id(),
-                'bukti_pembayaran' => $nomorPendaftaran,
-            ]);
-
-            Registration::create([
+            $registration = Registration::create([
                 'student_id' =>  $student->id,
                 'jenjang_daftar' => $this->formData['jenjang_daftar'],
                 'jalur_daftar' => $this->formData['jalur_daftar'],
+                'gelombang' => $this->formData['gelombang'],
+                'tahun' => $this->formData['tahun'],
                 'tanggal_daftar' => now(),
                 'online' => true,
                 'status' => 'pending'
             ]);
-            
+
+            $jalur_input = $this->formData['jalur_daftar'] ?? '';
+
+            if ($jalur_input == 'Yatim') {
+
+                $registration->is_paid = 1;  
+                $registration->save();
+                
+                Payment::create([
+                    '$fee_id' => 1,
+                    'jumlah' => '0',      
+                    'student_id' => $student->id,
+                    'tanggal_bayar' => now(),
+                    'verifikasi' => 1
+                ]);
+            }
         });
     
         session()->flash('message', "Pendaftaran Anda berhasil dikirim! Nomor Pendaftaran Anda adalah: **{$nomorPendaftaran}**. Silakan login menggunakan Nomor Pendaftaran dan NISN Anda.");

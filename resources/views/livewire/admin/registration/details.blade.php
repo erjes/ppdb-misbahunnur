@@ -41,31 +41,6 @@
         </tr>
     </table>
 
-    <h3>Update Status Pendaftaran</h3>
-    <form wire:submit.prevent="updateStatus">
-        <select wire:model="newStatus" required>
-            <option value="">Pilih Status</option>
-            <option value="approved">Diterima</option>
-            <option value="rejected">Ditolak</option>
-            <option value="pending">Menunggu</option>
-        </select>
-        <button type="submit">Update Status</button>
-    </form>
-
-    <h3>Biaya Pendaftaran</h3>
-    <table border="1" cellpadding="10">
-        @foreach($fees as $fee)
-            <tr>
-                <td><strong>Biaya</strong></td>
-                <td>{{ $fee->nama_biaya }}</td>
-            </tr>
-            <tr>
-                <td><strong>Jumlah</strong></td>
-                <td>{{ $fee->jumlah }}</td>
-            </tr>
-        @endforeach
-    </table>
-
     <h3>Pembayaran</h3>
     @if($payments->isNotEmpty())
         <table border="1" cellpadding="10">

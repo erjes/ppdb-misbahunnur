@@ -36,13 +36,68 @@
         </a>
       </li>
 
+      @if(Auth::user()->role == 'admin_ma')
+        <li>
+          <a href="{{ route('admin.students.data') }}"
+            class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:translate-x-1
+                                                        {{ request()->routeIs('admin.students.data') ? 'bg-green-700 text-white shadow-lg' : 'text-green-100 hover:bg-green-700/70 hover:text-white' }}">
+            <i
+              class="fa-solid fa-user-graduate w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
+            <span class="sidebar-text">Siswa MA</span>
+            <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
+              <i class="fa-solid fa-chevron-right text-xs"></i>
+            </span>
+          </a>
+        </li>
+      @endif
+
+      @if(Auth::user()->role == 'admin_mts')
+        <li>
+          <a href="{{ route('admin.students.data') }}"
+            class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:translate-x-1
+                                                        {{ request()->routeIs('admin.students.data') ? 'bg-green-700 text-white shadow-lg' : 'text-green-100 hover:bg-green-700/70 hover:text-white' }}">
+            <i
+              class="fa-solid fa-graduation-cap w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
+            <span class="sidebar-text">Siswa MTS</span>
+            <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
+              <i class="fa-solid fa-chevron-right text-xs"></i>
+            </span>
+          </a>
+        </li>
+      @endif
+
       <li>
-        <a href="{{ route('admin.students.mts') }}"
-          class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:translate-x-1
-                          {{ request()->routeIs('admin.students.mts') ? 'bg-green-700 text-white shadow-lg' : 'text-green-100 hover:bg-green-700/70 hover:text-white' }}">
-          <i
-            class="fa-solid fa-graduation-cap w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
-          <span class="sidebar-text">Siswa MTS</span>
+        <a href="{{ route('admin.registrations.settings') }}"
+          class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
+          <i class="fa-solid fa-gear w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
+          <span class="sidebar-text">Periode & Gelombang</span>
+          <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </span>
+        </a>
+      </li>
+
+
+      <li>
+        <a href="{{ route('admin.students.export') }}"
+          class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
+          <i class="fa-solid fa-gear w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
+          <span class="sidebar-text">Export Data</span>
+          <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </span>
+        </a>
+      </li>
+
+      <li class="py-2">
+        <div class="border-t border-green-700/50"></div>
+      </li>
+      <li>
+
+        <a href="{{ route('admin.content.poster') }}"
+          class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
+          <i class="fa-solid fa-gear w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
+          <span class="sidebar-text">Poster</span>
           <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
             <i class="fa-solid fa-chevron-right text-xs"></i>
           </span>
@@ -50,12 +105,21 @@
       </li>
 
       <li>
-        <a href="{{ route('admin.students.ma') }}"
-          class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:translate-x-1
-                          {{ request()->routeIs('admin.students.ma') ? 'bg-green-700 text-white shadow-lg' : 'text-green-100 hover:bg-green-700/70 hover:text-white' }}">
-          <i
-            class="fa-solid fa-user-graduate w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
-          <span class="sidebar-text">Siswa MA</span>
+        <a href="{{ route('admin.content.video') }}"
+          class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
+          <i class="fa-solid fa-gear w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
+          <span class="sidebar-text">Video</span>
+          <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </span>
+        </a>
+      </li>
+
+      <li>
+        <a href="{{ route('admin.registrations.letter') }}"
+          class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
+          <i class="fa-solid fa-gear w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
+          <span class="sidebar-text">Surat</span>
           <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
             <i class="fa-solid fa-chevron-right text-xs"></i>
           </span>
@@ -66,7 +130,7 @@
         <div class="border-t border-green-700/50"></div>
       </li>
 
-      <li>
+      {{-- <li>
         <a href="#"
           class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
           <i class="fa-solid fa-chart-bar w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
@@ -75,10 +139,10 @@
             <i class="fa-solid fa-chevron-right text-xs"></i>
           </span>
         </a>
-      </li>
+      </li> --}}
 
-      <li>
-        <a href="#"
+      {{-- <li>
+        <a href="{{ route('admin.payments.list')}}"
           class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
           <i
             class="fa-solid fa-credit-card w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
@@ -87,30 +151,19 @@
             <i class="fa-solid fa-chevron-right text-xs"></i>
           </span>
         </a>
-      </li>
+      </li> --}}
 
-      <li>
-        <a href="#"
+      {{-- <li>
+        <a href="{{ route('admin.payments.fees') }}"
           class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
           <i class="fa-solid fa-tag w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
-          <span class="sidebar-text">Harga</span>
+          <span class="sidebar-text">Biaya</span>
           <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
             <i class="fa-solid fa-chevron-right text-xs"></i>
           </span>
         </a>
-      </li>
+      </li> --}}
 
-      <li>
-        <a href="#"
-          class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
-          <i
-            class="fa-solid fa-heart-pulse w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
-          <span class="sidebar-text">Riwayat Kesehatan</span>
-          <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
-            <i class="fa-solid fa-chevron-right text-xs"></i>
-          </span>
-        </a>
-      </li>
     </ul>
   </nav>
 
@@ -245,7 +298,7 @@
     localStorage.setItem('sidebarCollapsed', isCollapsed);
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const sidebar = document.getElementById('sidebar');
     const content = document.getElementById('content');
     const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
@@ -265,7 +318,7 @@
     }
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
+      anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
@@ -279,7 +332,7 @@
   });
 
   document.querySelectorAll('#sidebar a').forEach(link => {
-    link.addEventListener('click', function() {
+    link.addEventListener('click', function () {
       if (window.innerWidth < 1024) {
         toggleSidebar();
       }
@@ -287,9 +340,9 @@
   });
 
   let resizeTimer;
-  window.addEventListener('resize', function() {
+  window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
+    resizeTimer = setTimeout(function () {
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('sidebar-overlay');
 

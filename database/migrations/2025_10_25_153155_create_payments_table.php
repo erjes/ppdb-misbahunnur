@@ -8,11 +8,11 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('fee_id')->nullable()->constrained('fees')->onDelete('set null');
             $table->string('bukti_pembayaran')->nullable();
+            $table->integer('jumlah')->nullable();
             $table->date('tanggal_bayar')->nullable();
-            $table->string('bukti')->nullable()->nullable();
             $table->boolean('verifikasi')->default(false);
             $table->timestamps();
         });

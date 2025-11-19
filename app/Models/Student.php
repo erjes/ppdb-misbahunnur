@@ -33,8 +33,14 @@ class Student extends Model
 
     public function documents()
     {
-        return $this->hasMany(Document::class);
+        return $this->hasMany(Document::class, 'student_id');
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'student_id');
+    }
+
 
     public function healthRecord()
     {
