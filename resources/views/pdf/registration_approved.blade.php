@@ -294,6 +294,7 @@
     {{-- ================= HALAMAN 2: PEMBERITAHUAN ================= --}}
     <div class="page-break"></div>
 
+    {{-- HEADER HALAMAN 2 --}}
     <div class="header">
         <h2>Misbahunnur</h2>
         <h3>PONDOK PESANTREN TAHFIZH AL-QUR'AN</h3>
@@ -305,48 +306,47 @@
     </div>
 
     <div class="text-justify">
-        <p>Diberitahukan kepada seluruh orang tua calon santri Pondok Pesantren Tahfizh Al-Qur'an (PPTQ) Misbahunnur
-            Tahun Pelajaran {{ $school_year }} bahwa:</p>
+        {{-- Paragraf Pembuka --}}
+        <p>{{ $p2_opening }}</p>
 
-        <p>Calon Santri PPTQ Misbahunnur TP. {{ $school_year }} yang telah dinyatakan lulus dalam tes Gelombang I bisa
-            diterima sebagai santri PPTQ Misbahunnur TP. {{ $school_year }} secara resmi apabila:</p>
+        {{-- Paragraf Kondisi --}}
+        <p>{{ $p2_conditional }}</p>
 
         <ol>
+            {{-- Poin 1: Persyaratan Dokumen --}}
             <li class="mb-10">
-                Melengkapi data/persyaratan pendaftaran Bagi yang belum diserahkan (Fotocopy KTP orangtua, Akta
-                Kelahiran, Kartu Keluarga, dan Kartu NISN. Sementara untuk fotocopi Ijazah dan SKHUS bisa menyusul);
+                @if(count($p2_requirements) > 1)
+                    <ul style="list-style-type: disc; padding-left: 15px;">
+                        @foreach($p2_requirements as $req)
+                            <li>{{ $req }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    {{ $p2_requirements[0] ?? '' }}
+                @endif
             </li>
+
+            {{-- Poin 2: Pembayaran --}}
             <li>
                 Menyelesaikan Administrasi Dana Sumbangan Pembangunan (DSP) dengan ketentuan:
                 <ol type="a" style="margin-top: 5px;">
-                    <li>Pembayaran DSP dibayarkan minimal 50% dari total DSP yang wajib dibayarkan.</li>
-                    <li>Waktu pembayaran mulai tanggal <strong>{{ $payment_deadline_1_start }}</strong> sampai
-                        <strong>{{ $payment_deadline_1_end }}</strong> sebagai pembayaran tahap I;
-                    </li>
-                    <li>Administrasi DSP secara keseluruhan harus lunas tanggal
-                        <strong>{{ $payment_deadline_1_end }}</strong> (hari berikutnya) sampai
-                        <strong>{{ $payment_deadline_2_end }}</strong> sebagai pembayaran tahap II;
-                    </li>
-                    <li>Untuk Kedatangan Santri akan kami beritahukan pada pengumuman selanjutnya di group gelombang 1.
-                    </li>
+                    @foreach($p2_payment_terms as $term)
+                        <li>{{ $term }}</li>
+                    @endforeach
                 </ol>
             </li>
         </ol>
 
-        <p class="text-bold mt-20">Berikut adalah hal-hal yang berkaitan dengan pengunduran diri:</p>
+        {{-- Pengunduran Diri --}}
+        <p class="text-bold mt-20">{{ $p2_resign_intro }}</p>
         <ol>
-            <li>Calon santri yang belum ada pembayaran tahap I sampai {{ $payment_deadline_1_end }} dinyatakan
-                mengundurkan diri;</li>
-            <li>Bagi calon santri yang langsung melunasi DSP ada potongan 15% dari Uang Pembangunan.</li>
-            <li>Calon santri yang mengundurkan diri sebelum tahun Pelajaran {{ $school_year }} dimulai, maka uang DSP
-                dikembalikan sebesar 100% dari yang telah dibayarkan;</li>
-            <li>Santri yang mengundurkan diri setelah dimulainya kegiatan tidak ada pengembalian uang DSP.</li>
-            <li>Santri yang dikeluarkan (karena melanggar aturan pesantren) setelah dimulainya kegiatan tidak ada
-                pengembalian uang DSP.</li>
+            @foreach($p2_resign_points as $point)
+                <li>{{ $point }}</li>
+            @endforeach
         </ol>
 
-        <p>Demikian surat pemberitahuan ini kami sampaikan. Atas perhatian dan kerjasamanya kami haturkan terima kasih.
-            Teriring Jazakumullah khairan katsiiran.</p>
+        {{-- Penutup --}}
+        <p>{{ $p2_closing }}</p>
     </div>
 
     {{-- Tanda Tangan Halaman 2 --}}
@@ -368,15 +368,8 @@
         </div>
     </div>
 
-    {{-- Note Footer --}}
+    {{-- Footer Note --}}
     <div style="clear: both; margin-top: 20px; border-top: 1px solid black; padding-top: 10px; font-size: 10pt;">
-        <strong>Nb.</strong> Pembayaran DSP bisa langsung ke Kantor PPTQ Misbahunnur atau melalui
-        {{ $bank_account_info }} dengan menyertakan nama orang tua dan nama calon santri dan memberikan informasinya ke
-        bagian keuangan PPTQ Misbahunnur.
-        <br>
-        Hub. WA 0812 8484 8495 (Admin Keuangan)
+        {!! $p2_footer_note !!}
     </div>
-
 </body>
-
-</html>

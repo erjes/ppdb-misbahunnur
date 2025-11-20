@@ -93,11 +93,24 @@ class StatusComponent extends Component
             }
         }
     }
- 
+
+        private function cleanDataForPdf($data)
+        {
+            $cleanedData = [];
+            foreach ($data as $key => $value) {
+                if (is_string($value)) {
+                    $cleanedData[$key] = preg_replace('/[^\x20-\x7E]/', '', $value);
+                } else {
+                    $cleanedData[$key] = $value;
+                }
+            }
+            return $cleanedData;
+        }
     public function exportApprovedRegistration()
     {
         if ($this->registration && $this->registration->status == 'approved') {
             
+            // 1. Bersihkan Data Siswa
             $studentData = $this->cleanDataForPdf([
                 'student' => $this->student,
                 'registration' => $this->registration,
@@ -106,7 +119,8 @@ class StatusComponent extends Component
                 'schoolData' => $this->schoolData,
             ]);
 
-            $letterSetting = LetterSetting::first();
+            // 2. Ambil Setting dari Database
+            $setting = LetterSetting::first(); 
 
             $letterData = [
                 'sk_number' => '...',
@@ -116,72 +130,75 @@ class StatusComponent extends Component
                 'signer_title' => 'Ketua Panitia',
                 'menimbang' => [],
                 'memperhatikan' => [],
-                'payment_deadline_1_start' => '-',
-                'payment_deadline_1_end' => '-',
-                'payment_deadline_2_end' => '-',
-                'bank_account_info' => '-',
                 'signature' => null,
                 'stamp' => null,
-                'city' => 'Cimahi' 
+                'city' => 'Cimahi',
+                
+                // Default Halaman 2 (Kosong)
+                'p2_opening' => '',
+                'p2_conditional' => '',
+                'p2_requirements' => [],
+                'p2_payment_terms' => [],
+                'p2_resign_intro' => '',
+                'p2_resign_points' => [],
+                'p2_closing' => '',
+                'p2_footer_note' => '',
             ];
 
-            if ($letterSetting) {
-                $sigPath = $letterSetting->signature_path ? public_path('storage/' . str_replace('public/', '', $letterSetting->signature_path)) : null;
-                $stampPath = $letterSetting->stamp_path ? public_path('storage/' . str_replace('public/', '', $letterSetting->stamp_path)) : null;
+            // 4. Override dengan Data Database jika ada
+            if ($setting) {
+                $replaceVars = function($text) use ($setting) {
+                    return str_replace('[TAHUN]', $setting->school_year, $text ?? '');
+                };
+
+                $sigPath = $setting->signature_path ? public_path('storage/' . str_replace('public/', '', $setting->signature_path)) : null;
+                $stampPath = $setting->stamp_path ? public_path('storage/' . str_replace('public/', '', $setting->stamp_path)) : null;
 
                 $letterData = [
-                    'sk_number' => $letterSetting->sk_number,
-                    'date' => $letterSetting->date_string,
-                    'school_year' => $letterSetting->school_year,
-                    'signer_name' => $letterSetting->signer_name,
-                    'signer_title' => $letterSetting->signer_title,
-                    'menimbang' => explode("\n", $letterSetting->menimbang), 
-                    'memperhatikan' => explode("\n", $letterSetting->memperhatikan),
-                    'payment_deadline_1_start' => $letterSetting->payment_start,
-                    'payment_deadline_1_end' => $letterSetting->payment_end_1,
-                    'payment_deadline_2_end' => $letterSetting->payment_end_2,
-                    'bank_account_info' => $letterSetting->bank_info,
+                    // Page 1
+                    'sk_number' => $setting->sk_number,
+                    'date' => $setting->date_string,
+                    'school_year' => $setting->school_year,
+                    'signer_name' => $setting->signer_name,
+                    'signer_title' => $setting->signer_title,
+                    'menimbang' => explode("\n", $setting->menimbang),
+                    'memperhatikan' => explode("\n", $setting->memperhatikan),
                     'signature' => $sigPath,
                     'stamp' => $stampPath,
-                    'city' => 'Cimahi'
+                    'city' => 'Cimahi', 
+
+                    // Page 2
+                    'p2_opening' => $replaceVars($setting->p2_opening),
+                    'p2_conditional' => $replaceVars($setting->p2_conditional),
+                    'p2_requirements' => explode("\n", $setting->p2_requirements),
+                    'p2_payment_terms' => explode("\n", $setting->p2_payment_terms),
+                    'p2_resign_intro' => $setting->p2_resign_intro,
+                    'p2_resign_points' => explode("\n", $setting->p2_resign_points),
+                    'p2_closing' => $setting->p2_closing,
+                    'p2_footer_note' => nl2br($replaceVars($setting->p2_footer_note)),
                 ];
             }
 
+            // 5. Gabungkan Data
             $finalData = array_merge($studentData, $letterData);
 
+            // 6. Generate PDF
             $pdf = PDF::loadView('pdf.registration_approved', $finalData);
             $pdf->setPaper('a4', 'portrait'); 
             
+            // Ambil nama aman (cek 'nama' atau 'name')
+            $safeName = $this->student->nama ?? $this->student->name ?? 'Siswa';
+
             return response()->streamDownload(
                 function () use ($pdf) {
                     echo $pdf->output();
                 },
-                'Surat_Keputusan_' . preg_replace('/[^A-Za-z0-9\-]/', '', $this->student->name ?? 'Siswa') . '.pdf'
+                'Surat_Keputusan_' . preg_replace('/[^A-Za-z0-9\-]/', '', $safeName) . '.pdf'
             );
         }
-    
+
         session()->flash('error', 'Pendaftaran tidak disetujui untuk ekspor.');
     }
-    
-    private function cleanDataForPdf($data)
-    {
-        array_walk_recursive($data, function (&$value, $key) {
-            if (is_string($value)) {
-                $value = mb_convert_encoding($value, 'UTF-8', 'UTF-8');
-                $value = preg_replace('/[^\x{0009}\x{000A}\x{000D}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', '', $value);
-                
-                $value = iconv('UTF-8', 'UTF-8//IGNORE', $value);
-                
-                $value = trim($value);
-                if (empty($value)) {
-                    $value = 'Tidak tersedia';
-                }
-            }
-        });
-        
-        return $data;
-    }
-    
 
     public function render()
     {
