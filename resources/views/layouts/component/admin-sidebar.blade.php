@@ -5,7 +5,7 @@
     <div class="flex items-center space-x-3 group">
       <div class="relative">
         <img src="{{ asset('images/logo.png') }}" alt="Logo"
-          class="h-10 w-10 mx-1 rounded-full ring-2 ring-green-600 group-hover:ring-green-400 transition-all duration-300">
+          class="h-9 w-9 mx-1 rounded-full ring-2 ring-green-600 group-hover:ring-green-400 transition-all duration-300">
         <div
           class="absolute inset-0 rounded-full bg-green-400 opacity-0 group-hover:opacity-20 blur-md transition-all duration-300">
         </div>
@@ -209,13 +209,13 @@
     }
   }
 
-  .content-expanded {
+  /* .content-expanded {
     margin-left: 256px;
   }
 
   .content-collapsed {
     margin-left: 80px;
-  }
+  } */
 
   @media (max-width: 1023px) {
 

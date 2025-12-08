@@ -20,6 +20,8 @@ class Registration extends Model
         'status',
         'jenjang_daftar',
         'jalur_daftar',
+        'gelombang',
+        'tahun',
         'tanggal_keluar',
         'alasan_keluar',
         'online',

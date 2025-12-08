@@ -17,39 +17,62 @@
 
   <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
 
-
   @filamentStyles
   @vite('resources/css/app.css')
 
   <style>
-    body {
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
       background-repeat: repeat;
       background-size: contain;
     }
 
     .sidebar {
       transition: all 0.3s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .sidebar-collapsed {
-      width: 64px;
+      width: 80px;
     }
 
     .sidebar-expanded {
-      width: 250px;
+      width: 256px;
+    }
+
+    .content-wrapper {
+      transition: margin-left 0.3s ease;
+      height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .content-expanded {
-      margin-left: 250px;
+      margin-left: 256px;
     }
 
     .content-collapsed {
-      margin-left: 64px;
+      margin-left: 80px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1023px) {
       .sidebar {
         transform: translateX(-100%);
+        z-index: 50;
       }
 
       .sidebar-mobile-open {
@@ -58,75 +81,111 @@
 
       .content-expanded,
       .content-collapsed {
-        margin-left: 0;
+        margin-left: 0 !important;
       }
+    }
+
+    /* Scrollbar styling for sidebar */
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: #166534;
+      border-radius: 3px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background: #15803d;
+    }
+
+    /* Scrollbar styling for content */
+    .content-wrapper::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .content-wrapper::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .content-wrapper::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+
+    .content-wrapper::-webkit-scrollbar-thumb:hover {
+      background: #555;
     }
   </style>
 </head>
 
 <body class="font-sans antialiased text-gray-800 bg-white">
-  <div class="min-h-screen flex">
-    @auth
-      @if (Auth::user()->role === 'admin_mts' || Auth::user()->role === 'admin_ma')
-        @include('layouts.component.admin-sidebar')
-      @else
-        @include('layouts.component.user-navigation')
-        {{-- @include('layouts.component.user-sidebar') --}}
-      @endif
+  @auth
+    @if (Auth::user()->role === 'admin_mts' || Auth::user()->role === 'admin_ma')
+      @include('layouts.component.admin-sidebar')
     @else
-      @include('layouts.component.user-navigation')
-      {{-- @include('layouts.component.user-sidebar') --}}
-    @endauth
+      @include('layouts.component.user-sidebar')
+    @endif
+  @else
+    @include('layouts.component.user-sidebar')
+  @endauth
 
-    <div class="flex-1 flex flex-col">
-      <header class="bg-white shadow-sm border-b border-gray-200">
-        <div class="flex items-center justify-between px-6 py-4">
-          <div class="flex items-center">
-            <button @click="toggleSidebar" class="p-2 rounded-md text-gray-600 hover:bg-gray-100 lg:hidden">
-              <i class="fa-solid fa-bars"></i>
-            </button>
-            <h1 class="text-xl font-semibold text-gray-800 ml-4">
-              @yield('page-title', 'Dashboard')
-            </h1>
-          </div>
+  <div class="content-wrapper content-expanded" id="content">
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30 flex-shrink-0">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div class="flex items-center">
+          <button onclick="toggleSidebar()" class="p-2 rounded-md text-gray-600 hover:bg-gray-100 lg:hidden">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <h1 class="text-xl font-semibold text-gray-800">
+            @yield('page-title', 'Dashboard')
+          </h1>
+        </div>
 
-          <div class="flex items-center space-x-4">
-            <x-dropdown align="right" width="48">
-              <x-slot name="trigger">
-                <button class="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-900">
-                  <div class="text-right">
-                    <div class="font-semibold">{{ Auth::user()->name }}</div>
-                    <div class="text-xs text-gray-500">({{ strtoupper(Auth::user()->role) }})</div>
-                  </div>
-                  <i class="fa-solid fa-chevron-down text-xs"></i>
-                </button>
-              </x-slot>
+        <div class="flex items-center space-x-4">
+          <x-dropdown align="right" width="48">
+            <x-slot name="trigger">
+              <button class="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+                <div class="text-right">
+                  <div class="font-semibold">{{ Auth::user()->name }}</div>
+                  <div class="text-xs text-gray-500">({{ strtoupper(Auth::user()->role) }})</div>
+                </div>
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+              </button>
+            </x-slot>
 
-              <x-slot name="content">
-                <x-dropdown-link :href="route('profile.edit')">
-                  <i class="fa-solid fa-user mr-2"></i>Profile
+            <x-slot name="content">
+              <x-dropdown-link :href="route('profile.edit')">
+                <i class="fa-solid fa-user mr-2"></i>Profile
+              </x-dropdown-link>
+              <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                  <i class="fa-solid fa-right-from-bracket mr-2"></i>Log Out
                 </x-dropdown-link>
-                <form method="POST" action="{{ route('logout') }}">
-                  @csrf
-                  <x-dropdown-link :href="route('logout')"
-                    onclick="event.preventDefault(); this.closest('form').submit();">
-                    <i class="fa-solid fa-right-from-bracket mr-2"></i>Log Out
-                  </x-dropdown-link>
-                </form>
-              </x-slot>
-            </x-dropdown>
-          </div>
+              </form>
+            </x-slot>
+          </x-dropdown>
         </div>
-      </header>
+      </div>
+    </header>
 
-      <main class="flex-1 overflow-auto bg-gray-50">
-        <div class="container mx-10 py-6">
-          {{ $slot ?? '' }}
-          @yield('content')
-        </div>
-      </main>
-    </div>
+    <main class="flex-1">
+      <div class="px-6 py-6">
+        {{ $slot ?? '' }}
+        @yield('content')
+      </div>
+    </main>
   </div>
+
+  <!-- Mobile Overlay -->
+  <div id="sidebar-overlay"
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
+    onclick="toggleSidebar()"></div>
 
   @filamentScripts
   @vite('resources/js/app.js')
@@ -134,18 +193,85 @@
   <script>
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
-      const content = document.getElementById('content');
+      const overlay = document.getElementById('sidebar-overlay');
+      
       sidebar.classList.toggle('sidebar-mobile-open');
+      overlay.classList.toggle('hidden');
+
+      if (sidebar.classList.contains('sidebar-mobile-open')) {
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+          overlay.style.opacity = '1';
+        }, 10);
+      } else {
+        overlay.style.opacity = '0';
+      }
     }
 
     function toggleDesktopSidebar() {
       const sidebar = document.getElementById('sidebar');
       const content = document.getElementById('content');
+      
       sidebar.classList.toggle('sidebar-collapsed');
       sidebar.classList.toggle('sidebar-expanded');
       content.classList.toggle('content-collapsed');
       content.classList.toggle('content-expanded');
+
+      const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
+      localStorage.setItem('sidebarCollapsed', isCollapsed);
     }
+
+    // Load sidebar state on page load
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.getElementById('sidebar');
+      const content = document.getElementById('content');
+      const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
+      if (isCollapsed && window.innerWidth >= 1024) {
+        sidebar.classList.remove('sidebar-expanded');
+        sidebar.classList.add('sidebar-collapsed');
+        content.classList.remove('content-expanded');
+        content.classList.add('content-collapsed');
+      }
+
+      // Close mobile sidebar when clicking a link
+      document.querySelectorAll('#sidebar a').forEach(link => {
+        link.addEventListener('click', function () {
+          if (window.innerWidth < 1024) {
+            toggleSidebar();
+          }
+        });
+      });
+    });
+
+    // Handle window resize
+    let resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const content = document.getElementById('content');
+
+        if (window.innerWidth >= 1024) {
+          sidebar.classList.remove('sidebar-mobile-open');
+          overlay.classList.add('hidden');
+          
+          // Restore desktop sidebar state
+          const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+          if (isCollapsed) {
+            content.classList.add('content-collapsed');
+            content.classList.remove('content-expanded');
+          } else {
+            content.classList.add('content-expanded');
+            content.classList.remove('content-collapsed');
+          }
+        } else {
+          // Mobile view - remove margin
+          content.classList.remove('content-expanded', 'content-collapsed');
+        }
+      }, 250);
+    });
   </script>
 </body>
 

@@ -3,20 +3,24 @@
     <div class="flex flex-wrap items-center gap-3">
 
       <div class="flex-1 min-w-[260px]">
-        <div class="relative">
+        <label for="tahunFilter" class="block text-sm font-medium text-gray-700">Cari siswa</label>
+        <div class="relative mt-1">
           <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           <input type="text" placeholder="Cari nama/nomor/NISN/NIK" wire:model.live.debounce.400ms="search"
             class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200">
         </div>
       </div>
 
-      <select wire:model.live="perPage"
-        class="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white">
-        <option value="10">10 / halaman</option>
-        <option value="25">25 / halaman</option>
-        <option value="50">50 / halaman</option>
-        <option value="100">100 / halaman</option>
-      </select>
+      {{-- <div>
+        <label for="tahunFilter" class="block text-sm font-medium text-gray-700">Cari siswa</label>
+        <select wire:model.live="perPage"
+          class="mt-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-white">
+          <option value="10">10 / halaman</option>
+          <option value="25">25 / halaman</option>
+          <option value="50">50 / halaman</option>
+          <option value="100">100 / halaman</option>
+        </select>
+      </div> --}}
 
       <div>
         <label for="tahunFilter" class="block text-sm font-medium text-gray-700">Tahun</label>

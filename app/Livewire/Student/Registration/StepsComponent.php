@@ -254,7 +254,8 @@ class StepsComponent extends Component
                 'jenjang_daftar' => $this->formData['jenjang_daftar'],
                 'jalur_daftar' => $this->formData['jalur_daftar'],
                 'gelombang' => $this->formData['gelombang'],
-                'tahun' => $this->formData['tahun'],
+                // 'tahun' => $this->formData['tahun'],
+                'tahun' => $this->formModel->tahun ?? date('Y'),
                 'tanggal_daftar' => now(),
                 'online' => true,
                 'status' => 'pending'

@@ -1,5 +1,5 @@
-<div class="max-w-3xl mx-auto py-8">
-    <h1 class="text-2xl font-semibold mb-6">Pengaturan Pendaftaran</h1>
+<div class="mx-auto">
+    <h1 class="text-2xl font-bold mb-6">Pengaturan Pendaftaran</h1>
 
     @if (session()->has('message'))
         <div class="mb-4 rounded bg-green-100 text-green-800 px-4 py-2 text-sm">

@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
 
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
 
@@ -57,6 +57,10 @@
                 </div>
             </header>
         @endisset
+
+        <a target="_blank" href="https://api.whatsapp.com/send/?phone=6281235500079&text&type=phone_number&app_absent=0">
+          <img class="fixed bottom-5 right-5 w-16" src="{{ asset('images/whatsappLogo.png') }}" alt="Logo">
+        </a>
 
         <main class="flex-grow">
             {{ $slot ?? '' }}
