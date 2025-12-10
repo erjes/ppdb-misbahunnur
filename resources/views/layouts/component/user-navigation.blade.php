@@ -8,13 +8,12 @@
 
             <div class="flex items-center space-x-3 flex-shrink-0">
                 <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo"
-                        :class="scrolled ? 'h-7 w-7' : 'h-9 w-9'"
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" :class="scrolled ? 'h-7 w-7' : 'h-9 w-9'"
                         class="rounded-full transition-all duration-500">
                     <div class="flex flex-col leading-tight">
                         <h1 :class="scrolled ? 'text-base' : 'text-sm'"
                             class="text-white font-bold tracking-tight transition-all duration-500 whitespace-nowrap">
-                            PPDB MISBAHUNNUR
+                            PMB MISBAHUNNUR
                         </h1>
                         <h2 :class="scrolled ? 'text-xs' : 'text-xs'"
                             class="text-green-100 font-semibold uppercase transition-all duration-500 whitespace-nowrap">
@@ -25,10 +24,12 @@
             </div>
 
             <div class="hidden sm:flex items-center space-x-1 text-xs font-semibold text-white">
-                <x-nav-link href="{{ route('registration.status') }}" :active="request()->routeIs('registration.status')">
+                <x-nav-link href="{{ route('registration.status') }}"
+                    :active="request()->routeIs('registration.status')">
                     <i class="fa-solid fa-shuffle"></i><span>Pendaftaran</span>
                 </x-nav-link>
-                <x-nav-link href="{{ route('registration.documents') }}" :active="request()->routeIs('registration.documents')">
+                <x-nav-link href="{{ route('registration.documents') }}"
+                    :active="request()->routeIs('registration.documents')">
                     <i class="fa-solid fa-shuffle"></i><span>Dokumen</span>
                 </x-nav-link>
                 {{-- <x-nav-link href="#" :active="request()->routeIs('#')">
@@ -46,8 +47,8 @@
                                     <div class="font-semibold leading-tight">{{ Auth::user()->name }}</div>
                                     <div class="text-xs text-gray-500">({{ strtoupper(Auth::user()->role) }})</div>
                                 </div>
-                                <svg class="ml-2 h-4 w-4 text-gray-600" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg class="ml-2 h-4 w-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 9l-7 7-7-7" />
                                 </svg>
@@ -75,9 +76,8 @@
                         <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
+                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -86,10 +86,12 @@
 
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden bg-green-700 transition-all duration-500">
         <div class="pt-2 pb-3 space-y-1 text-white text-sm font-semibold">
-            <x-responsive-nav-link href="{{ route('registration.status') }}" :active="request()->routeIs('registration.status')">
+            <x-responsive-nav-link href="{{ route('registration.status') }}"
+                :active="request()->routeIs('registration.status')">
                 <i class="fa-solid fa-shuffle"></i> Pendaftaran
             </x-responsive-nav-link>
-            <x-responsive-nav-link href="{{ route('registration.documents') }}" :active="request()->routeIs('registration.documents')">
+            <x-responsive-nav-link href="{{ route('registration.documents') }}"
+                :active="request()->routeIs('registration.documents')">
                 <i class="fa-solid fa-shuffle"></i> Dokumen
             </x-responsive-nav-link>
             {{-- <x-responsive-nav-link href="#" :active="request()->routeIs('#')">

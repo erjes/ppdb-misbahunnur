@@ -12,7 +12,7 @@
       </div>
       <div class="flex flex-col leading-tight sidebar-text">
         <h1 class="text-white font-bold text-sm tracking-tight whitespace-nowrap">
-          PPDB MISBAHUNNUR
+          PMB MISBAHUNNUR
         </h1>
         <h2 class="text-green-100 font-semibold text-xs uppercase whitespace-nowrap">
           Cimahi
@@ -57,7 +57,8 @@
       <li>
         <a href="#"
           class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium text-green-100 hover:bg-green-700/70 hover:text-white transition-all duration-300 transform hover:translate-x-1">
-          <i class="fa-solid fa-credit-card w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
+          <i
+            class="fa-solid fa-credit-card w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
           <span class="sidebar-text">Pembayaran</span>
           <span class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300 sidebar-text">
             <i class="fa-solid fa-chevron-right text-xs"></i>
@@ -199,7 +200,7 @@
     localStorage.setItem('sidebarCollapsed', isCollapsed);
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const sidebar = document.getElementById('sidebar');
     const content = document.getElementById('content');
     const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
@@ -219,7 +220,7 @@
     }
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
+      anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
@@ -233,7 +234,7 @@
   });
 
   document.querySelectorAll('#sidebar a').forEach(link => {
-    link.addEventListener('click', function() {
+    link.addEventListener('click', function () {
       if (window.innerWidth < 1024) {
         toggleSidebar();
       }
@@ -241,9 +242,9 @@
   });
 
   let resizeTimer;
-  window.addEventListener('resize', function() {
+  window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
+    resizeTimer = setTimeout(function () {
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('sidebar-overlay');
 

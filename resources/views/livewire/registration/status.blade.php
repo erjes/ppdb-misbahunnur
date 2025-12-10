@@ -24,24 +24,24 @@
             <div class="flex items-center space-x-2">
               @php
                 $statusConfig = [
-                    'pending' => [
-                        'bg' => 'bg-yellow-100',
-                        'text' => 'text-yellow-800',
-                        'icon' => 'fa-clock',
-                        'label' => 'Menunggu Verifikasi',
-                    ],
-                    'approved' => [
-                        'bg' => 'bg-green-100',
-                        'text' => 'text-green-800',
-                        'icon' => 'fa-check-circle',
-                        'label' => 'Disetujui',
-                    ],
-                    'rejected' => [
-                        'bg' => 'bg-red-100',
-                        'text' => 'text-red-800',
-                        'icon' => 'fa-times-circle',
-                        'label' => 'Ditolak',
-                    ],
+                  'pending' => [
+                    'bg' => 'bg-yellow-100',
+                    'text' => 'text-yellow-800',
+                    'icon' => 'fa-clock',
+                    'label' => 'Menunggu Verifikasi',
+                  ],
+                  'approved' => [
+                    'bg' => 'bg-green-100',
+                    'text' => 'text-green-800',
+                    'icon' => 'fa-check-circle',
+                    'label' => 'Disetujui',
+                  ],
+                  'rejected' => [
+                    'bg' => 'bg-red-100',
+                    'text' => 'text-red-800',
+                    'icon' => 'fa-times-circle',
+                    'label' => 'Ditolak',
+                  ],
                 ];
                 $status = $statusConfig[$registration->status] ?? $statusConfig['pending'];
               @endphp
@@ -175,14 +175,14 @@
             <i class="fa-solid fa-male text-orange-600 mt-1"></i>
             <div>
               <p class="text-sm text-gray-600">Nama Ayah</p>
-              <p class="font-semibold text-gray-800">{{ $parentData['ayah']['nama_lengkap'] ?? 'Tidak tersedia' }}</p>
+              <p class="font-semibold text-gray-800">{{ $parentData['nama_ayah'] ?? 'Tidak tersedia' }}</p>
             </div>
           </div>
           <div class="flex items-start space-x-3">
             <i class="fa-solid fa-female text-orange-600 mt-1"></i>
             <div>
               <p class="text-sm text-gray-600">Nama Ibu</p>
-              <p class="font-semibold text-gray-800">{{ $parentData['ibu']['nama_lengkap'] ?? 'Tidak tersedia' }}</p>
+              <p class="font-semibold text-gray-800">{{ $parentData['nama_ibu'] ?? 'Tidak tersedia' }}</p>
             </div>
           </div>
         </div>

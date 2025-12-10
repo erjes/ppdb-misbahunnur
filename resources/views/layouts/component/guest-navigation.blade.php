@@ -14,13 +14,13 @@
                 </a>
                 <div class="hidden sm:flex items-center space-x-6 text-sm font-semibold">
                     <x-nav-link href="#alur" :active="request()->routeIs('#alur')">
-                        <i class="fa-solid fa-shuffle"></i><span>ALUR</span>
+                        <i></i><span>ALUR</span>
                     </x-nav-link>
                     <x-nav-link href="#syarat" :active="request()->routeIs('#syarat')">
-                        <i class="fa-solid fa-shuffle"></i><span>SYARAT</span>
+                        <i></i><span>SYARAT</span>
                     </x-nav-link>
                     <x-nav-link href="#kontak" :active="request()->routeIs('#kontak')">
-                        <i class="fa-solid fa-shuffle"></i><span>KONTAK</span>
+                        <i></i><span>KONTAK</span>
                     </x-nav-link>
                 </div>
             </div>

@@ -30,16 +30,16 @@
       <div class="grid md:grid-cols-3 lg:grid-cols-6 gap-8 mt-12">
         @php
           $steps = [
-              ['1', 'bg-green-600', 'Tata cara daftar ulang online dapat diakses di website resmi.'],
-              [
-                  '2',
-                  'bg-green-600',
-                  'Mengisi data peserta didik baru secara online dan menyerahkan printout-nya saat daftar ulang.',
-              ],
-              ['3', 'bg-yellow-500', 'Menyerahkan berkas daftar ulang ke panitia pada waktu yang telah dijadwalkan.'],
-              ['4', 'bg-yellow-500', 'Menandatangani surat pernyataan peraturan calon peserta didik.'],
-              ['5', 'bg-blue-600', 'Menyerahkan Surat Keterangan Lulus (SKL).'],
-              ['6', 'bg-orange-500', 'Calon peserta didik baru yang lolos verifikasi mengikuti kegiatan MATSAMA.'],
+            ['1', 'bg-green-600', 'Tata cara daftar ulang online dapat diakses di website resmi.'],
+            [
+              '2',
+              'bg-green-600',
+              'Mengisi data peserta didik baru secara online dan menyerahkan printout-nya saat daftar ulang.',
+            ],
+            ['3', 'bg-yellow-500', 'Menyerahkan berkas daftar ulang ke panitia pada waktu yang telah dijadwalkan.'],
+            ['4', 'bg-yellow-500', 'Menandatangani surat pernyataan peraturan calon peserta didik.'],
+            ['5', 'bg-blue-600', 'Menyerahkan Surat Keterangan Lulus (SKL).'],
+            ['6', 'bg-orange-500', 'Calon peserta didik baru yang lolos verifikasi mengikuti kegiatan MATSAMA.'],
           ];
         @endphp
 

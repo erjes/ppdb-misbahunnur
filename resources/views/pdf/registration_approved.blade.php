@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Surat Keputusan PPDB</title>
+    <title>Surat Keputusan</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -193,13 +193,13 @@
         <div>PPTQ MISBAHUNNUR</div>
         <div>TAHUN PELAJARAN {{ $school_year }}</div>
         <div class="mt-20">NO. {{ $sk_number }}</div>
-        <div class="mt-20">TENTANG HASIL TES PPDB PPTQ MISBAHUNNUR</div>
+        <div class="mt-20">TENTANG HASIL PMB PPTQ MISBAHUNNUR</div>
         <div>GELOMBANG 1</div>
         <div>TINGKAT MTS DAN MA</div>
     </div>
 
     <div class="mt-20">
-        <div class="text-center mb-10 text-bold">Ketua Panitia PPDB PPTQ Misbahunnur</div>
+        <div class="text-center mb-10 text-bold">Ketua Panitia PMB PPTQ Misbahunnur</div>
 
         {{-- Menimbang --}}
         <table class="section-table">

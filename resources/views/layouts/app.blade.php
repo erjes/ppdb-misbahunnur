@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>{{ config('app.name', 'PPDB Misbahunnur Cimahi') }}</title>
+  <title>{{ config('app.name', 'PMB Misbahunnur Cimahi') }}</title>
 
   <link rel="preconnect" href="https://fonts.bunny.net">
   <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
@@ -27,7 +27,8 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       height: 100%;
       overflow: hidden;
       background-repeat: repeat;
@@ -141,9 +142,9 @@
           <button onclick="toggleSidebar()" class="p-2 rounded-md text-gray-600 hover:bg-gray-100 lg:hidden">
             <i class="fa-solid fa-bars"></i>
           </button>
-          <h1 class="text-xl font-semibold text-gray-800">
+          {{-- <h1 class="text-xl font-semibold text-gray-800">
             @yield('page-title', 'Dashboard')
-          </h1>
+          </h1> --}}
         </div>
 
         <div class="flex items-center space-x-4">
@@ -164,7 +165,8 @@
               </x-dropdown-link>
               <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                <x-dropdown-link :href="route('logout')"
+                  onclick="event.preventDefault(); this.closest('form').submit();">
                   <i class="fa-solid fa-right-from-bracket mr-2"></i>Log Out
                 </x-dropdown-link>
               </form>
@@ -194,7 +196,7 @@
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('sidebar-overlay');
-      
+
       sidebar.classList.toggle('sidebar-mobile-open');
       overlay.classList.toggle('hidden');
 
@@ -211,7 +213,7 @@
     function toggleDesktopSidebar() {
       const sidebar = document.getElementById('sidebar');
       const content = document.getElementById('content');
-      
+
       sidebar.classList.toggle('sidebar-collapsed');
       sidebar.classList.toggle('sidebar-expanded');
       content.classList.toggle('content-collapsed');
@@ -256,7 +258,7 @@
         if (window.innerWidth >= 1024) {
           sidebar.classList.remove('sidebar-mobile-open');
           overlay.classList.add('hidden');
-          
+
           // Restore desktop sidebar state
           const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
           if (isCollapsed) {

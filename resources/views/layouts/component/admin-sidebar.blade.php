@@ -12,7 +12,7 @@
       </div>
       <div class="flex flex-col leading-tight sidebar-text">
         <h1 class="text-white font-bold text-sm tracking-tight whitespace-nowrap">
-          PPDB MISBAHUNNUR
+          PMB MISBAHUNNUR
         </h1>
         <h2 class="text-green-100 font-semibold text-xs uppercase whitespace-nowrap">
           Cimahi
@@ -40,7 +40,7 @@
         <li>
           <a href="{{ route('admin.students.data') }}"
             class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:translate-x-1
-                                                        {{ request()->routeIs('admin.students.data') ? 'bg-green-700 text-white shadow-lg' : 'text-green-100 hover:bg-green-700/70 hover:text-white' }}">
+                                                          {{ request()->routeIs('admin.students.data') ? 'bg-green-700 text-white shadow-lg' : 'text-green-100 hover:bg-green-700/70 hover:text-white' }}">
             <i
               class="fa-solid fa-user-graduate w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
             <span class="sidebar-text">Siswa MA</span>
@@ -55,7 +55,7 @@
         <li>
           <a href="{{ route('admin.students.data') }}"
             class="group flex items-center space-x-3 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:translate-x-1
-                                                        {{ request()->routeIs('admin.students.data') ? 'bg-green-700 text-white shadow-lg' : 'text-green-100 hover:bg-green-700/70 hover:text-white' }}">
+                                                          {{ request()->routeIs('admin.students.data') ? 'bg-green-700 text-white shadow-lg' : 'text-green-100 hover:bg-green-700/70 hover:text-white' }}">
             <i
               class="fa-solid fa-graduation-cap w-5 text-center transition-transform duration-300 group-hover:scale-110"></i>
             <span class="sidebar-text">Siswa MTS</span>

@@ -122,25 +122,47 @@
                   <div class="flex items-center">
                     <span
                       class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 font-bold text-sm shadow">1</span>
-                    <p class="text-gray-700 text-sm leading-relaxed">Setiap calon peserta didik wajib mengisi form
-                      pendaftaran...</p>
+                    <p class="text-gray-700 text-sm leading-relaxed">Setiap calon peserta didik wajib mengisi form pendaftaran dengan lengkap. Data-data yang diisikan pada form PMB Online harus sesuai dengan data asli dan benar adanya.</p>
                   </div>
                 </div>
                 <div
-                  class="bg-gradient-to-r from-purple-50 to-pink-50 p-5 rounded-xl border-l-4 border-purple-500 shadow-sm hover:shadow-md transition-shadow">
+                  class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-xl border-l-4 border-blue-500 shadow-sm hover:shadow-md transition-shadow">
                   <div class="flex items-center">
                     <span
-                      class="bg-purple-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 font-bold text-sm shadow">2</span>
-                    <p class="text-gray-700 text-sm leading-relaxed">Calon peserta didik yang sudah mendaftar secara
-                      online akan mendapatkan Nomor Pendaftaran...</p>
+                      class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 font-bold text-sm shadow">2</span>
+                    <p class="text-gray-700 text-sm leading-relaxed">Calon peserta didik yang sudah mendaftarkan secara online akan mendapatkan Nomor Pendaftaran yang harus dicetak dan dilampirkan dalam persyaratan yang diminta oleh Panitia PMB Online MISBAHUNNUR CIMAHI.</p>
                   </div>
                 </div>
                 <div
-                  class="bg-gradient-to-r from-amber-50 to-orange-50 p-5 rounded-xl border-l-4 border-amber-500 shadow-sm hover:shadow-md transition-shadow">
+                  class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-xl border-l-4 border-blue-500 shadow-sm hover:shadow-md transition-shadow">
                   <div class="flex items-center">
                     <span
-                      class="bg-amber-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 font-bold text-sm shadow">3</span>
-                    <p class="text-gray-700 text-sm leading-relaxed">...</p>
+                      class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 font-bold text-sm shadow">3</span>
+                    <p class="text-gray-700 text-sm leading-relaxed">Calon peserta didik yang sudah mendaftarkan diri melalui PMB Online MISBAHUNNUR CIMAHI akan mendapatkan nomor pendaftaran dan password yang nantinya akan digunakan untuk akses informasi yang berkaitan dengan PMB Online MISBAHUNNUR CIMAHI.</p>
+                  </div>
+                </div>
+                  <div
+                  class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-xl border-l-4 border-blue-500 shadow-sm hover:shadow-md transition-shadow">
+                  <div class="flex items-center">
+                    <span
+                      class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 font-bold text-sm shadow">4</span>
+                    <p class="text-gray-700 text-sm leading-relaxed">Calon peserta didik yang sudah mendaftarakan diri melalui PMB Online MISBAHUNNUR CIMAHI wajib mengunggah / menyerahkan dokumen persyaratan yang sudah ditentukan oleh Panitia PMB Online.</p>
+                  </div>
+                </div>
+                <div
+                  class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-xl border-l-4 border-blue-500 shadow-sm hover:shadow-md transition-shadow">
+                  <div class="flex items-center">
+                    <span
+                      class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 font-bold text-sm shadow">5</span>
+                    <p class="text-gray-700 text-sm leading-relaxed">Setiap calon peserta didik yang mendaftar wajib melaksanakan daftar ulang yang diadakan dan di tentukan waktu nya oleh panitia PMB Online MISBAHUNNUR CIMAHI.</p>
+                  </div>
+                </div>
+                         <div
+                  class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-xl border-l-4 border-blue-500 shadow-sm hover:shadow-md transition-shadow">
+                  <div class="flex items-center">
+                    <span
+                      class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 font-bold text-sm shadow">6</span>
+                    <p class="text-gray-700 text-sm leading-relaxed">Data yang sudah diberikan oleh Panitia PMB Online MISBAHUNNUR CIMAHI hanya digunakan untuk keperluan penerimaan peserta didik baru. Data yang dikirimkan akan dijaga kerahasiaannya dan tidak akan dipublikasikan oleh Panitia PMB Online.</p>
                   </div>
                 </div>
               </div>

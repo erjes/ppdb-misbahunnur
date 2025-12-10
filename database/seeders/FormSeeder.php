@@ -11,7 +11,7 @@ class FormSeeder extends Seeder
     public function run(): void
     {
         Form::create([
-            'name' => 'Form Pendaftaran PPDB Online',
+            'name' => 'Form Pendaftaran PMB Online',
             'slug' => 'ppdb-online',
             'tahun'           => 2025,       
             'gelombang_aktif' => 1,          
@@ -19,7 +19,7 @@ class FormSeeder extends Seeder
             'form_steps' => json_encode([
                 [
                     'step_number' => 1,
-                    'title' => 'Ketentuan PPDB Online',
+                    'title' => 'Ketentuan PMB Online',
                     // "gelombang_metadata" => "1", 
                     'fields' => [
                         [
