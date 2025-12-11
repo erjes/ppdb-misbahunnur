@@ -41,17 +41,6 @@ class Student extends Model
         return $this->hasMany(Payment::class, 'student_id');
     }
 
-
-    public function healthRecord()
-    {
-        return $this->hasOne(HealthRecord::class);
-    }
-
-    public function grades()
-    {
-        return $this->hasMany(Grade::class);
-    }
-
     public function registration()
     {
         return $this->hasOne(Registration::class);

@@ -4,12 +4,11 @@ namespace App\Livewire\Admin\Pdf;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\LetterSetting; 
+use App\Models\LetterSetting;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]
-
 class LetterComponent extends Component
 {
     use WithFileUploads;
@@ -102,14 +101,34 @@ class LetterComponent extends Component
             'p2_footer_note' => $this->p2_footer_note,
         ];
 
+        $currentSetting = LetterSetting::first();
+
         if ($this->signature_image) {
-            $data['signature_path'] = $this->signature_image->store('public/letters');
+            if ($currentSetting && $currentSetting->signature_path) {
+                if (Storage::disk('public')->exists($currentSetting->signature_path)) {
+                    Storage::disk('public')->delete($currentSetting->signature_path);
+                }
+            }
+            $data['signature_path'] = $this->signature_image->store('letters', 'public');
         }
+
         if ($this->stamp_image) {
-            $data['stamp_path'] = $this->stamp_image->store('public/letters');
+            if ($currentSetting && $currentSetting->stamp_path) {
+                if (Storage::disk('public')->exists($currentSetting->stamp_path)) {
+                    Storage::disk('public')->delete($currentSetting->stamp_path);
+                }
+            }
+            $data['stamp_path'] = $this->stamp_image->store('letters', 'public');
         }
 
         LetterSetting::updateOrCreate(['id' => 1], $data);
+        
+        if ($this->signature_image) $this->existing_signature = $data['signature_path'];
+        if ($this->stamp_image) $this->existing_stamp = $data['stamp_path'];
+        
+        $this->signature_image = null;
+        $this->stamp_image = null;
+
         session()->flash('message', 'Pengaturan surat halaman 1 & 2 berhasil disimpan.');
     }
 

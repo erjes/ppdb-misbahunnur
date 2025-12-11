@@ -8,10 +8,10 @@ use App\Models\Document;
 use App\Models\Student;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]
-
 class DocumentComponent extends Component
 {
     use WithFileUploads;
@@ -33,9 +33,9 @@ class DocumentComponent extends Component
     public $no_ijazah;
 
     public $jalurDaftar = 'Reguler'; 
-    
-    // --- RULES & MOUNTING ---
-    
+    public $studentId; 
+    public $existingDocuments = [];
+
     protected $baseRules = [
         'akta_kelahiran' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', 
         'kartu_keluarga' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -56,14 +56,31 @@ class DocumentComponent extends Component
 
     public function mount()
     {
-        $studentId = Student::where('user_id', Auth::id())->value('id');
+        $this->studentId = Student::where('user_id', Auth::id())->value('id');
 
-        if ($studentId) {
-            $registration = Registration::where('student_id', $studentId)->first();
+        if ($this->studentId) {
+            $registration = Registration::where('student_id', $this->studentId)->first();
             
             if ($registration) {
                 $this->jalurDaftar = $registration->jalur_daftar ?? 'Reguler'; 
             }
+            
+            $this->loadExistingDocuments();
+        }
+    }
+
+    public function loadExistingDocuments()
+    {
+        $docs = Document::where('student_id', $this->studentId)->get();
+        
+        foreach ($docs as $doc) {
+            $this->existingDocuments[$doc->jenis_dokumen] = [
+                'path' => $doc->file_path, 
+                'no'   => $doc->no_dokumen
+            ];
+            
+            if ($doc->jenis_dokumen == 'NISN & SKHUN') $this->no_nisn_skhun = $doc->no_dokumen;
+            if ($doc->jenis_dokumen == 'Ijazah') $this->no_ijazah = $doc->no_dokumen;
         }
     }
 
@@ -72,41 +89,36 @@ class DocumentComponent extends Component
         $rules = $this->baseRules;
         $jalur = $this->jalurDaftar;
 
+        
+        $hasSktm = isset($this->existingDocuments['Surat Ket. Tidak Mampu']);
+        $hasSertif = isset($this->existingDocuments['Sertifikat Lomba/Hafalan']);
+        $hasSuratKematian = isset($this->existingDocuments['Surat Kematian Ortu/Bapak']);
+
         if ($jalur == 'Dhuafa') {
-             $rules['surat_keterangan_tdk_mampu'] = 'required|file|mimes:pdf,jpg,jpeg,png|max:2048'; 
+             $rules['surat_keterangan_tdk_mampu'] = $hasSktm ? 'nullable|file|...' : 'required|file|mimes:pdf,jpg,jpeg,png|max:2048'; 
              $rules['sertifikat_tambahan'] = 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120';
         }
         
         if ($jalur == 'Yatim') { 
-            $rules['surat_kematian_ortu'] = 'required|file|mimes:pdf,jpg,jpeg,png|max:2048';
-            $rules['surat_keterangan_tdk_mampu'] = 'required|file|mimes:pdf,jpg,jpeg,png|max:2048';
+            $rules['surat_kematian_ortu'] = $hasSuratKematian ? 'nullable|file|...' : 'required|file|mimes:pdf,jpg,jpeg,png|max:2048';
+            $rules['surat_keterangan_tdk_mampu'] = $hasSktm ? 'nullable|file|...' : 'required|file|mimes:pdf,jpg,jpeg,png|max:2048';
         }
         
         if ($jalur == 'Prestasi') {
-            $rules['sertifikat_tambahan'] = 'required|file|mimes:pdf,jpg,jpeg,png|max:5120';
+            $rules['sertifikat_tambahan'] = $hasSertif ? 'nullable|file|...' : 'required|file|mimes:pdf,jpg,jpeg,png|max:5120';
         }
         
         return $rules;
     }
 
-    public function rules()
-    {
-        return $this->getRules();
-    }
-    
-
     public function saveDocuments()
     {
         $this->validate($this->getRules());
 
-        $student = Student::where('user_id', Auth::id())->first();
-
-        if (!$student) {
-            session()->flash('message', 'Data siswa tidak ditemukan untuk akun ini.');
+        if (!$this->studentId) {
+            session()->flash('message', 'Data siswa tidak ditemukan.');
             return;
         }
-
-        $studentId = $student->id;
         
         $uploads = [
             'Akta Kelahiran' => ['prop' => 'akta_kelahiran', 'no' => null],
@@ -127,11 +139,11 @@ class DocumentComponent extends Component
             $file = $this->{$data['prop']};
             
             if ($file) {
-                $path = $file->store('private/documents/' . $studentId);
+                $path = $file->store('documents/' . $this->studentId, 'private'); 
 
                 Document::updateOrCreate(
                     [
-                        'student_id' => $studentId, 
+                        'student_id' => $this->studentId, 
                         'jenis_dokumen' => $jenis
                     ],
                     [
@@ -139,8 +151,20 @@ class DocumentComponent extends Component
                         'file_path' => basename($path), 
                     ]
                 );
+            } elseif ($data['no'] !== null) {
+                Document::where('student_id', $this->studentId)
+                    ->where('jenis_dokumen', $jenis)
+                    ->update(['no_dokumen' => $data['no']]);
             }
         }
+
+        $this->reset([
+            'akta_kelahiran', 'kartu_keluarga', 'ktp_ortu', 'nisn_skhun',
+            'ijazah', 'rapor', 'pas_foto', 'surat_aktif_sekolah',
+            'surat_kematian_ortu', 'surat_keterangan_tdk_mampu', 'sertifikat_tambahan'
+        ]);
+
+        $this->loadExistingDocuments();
 
         session()->flash('message', 'Dokumen berhasil diunggah dan disimpan!');
     }

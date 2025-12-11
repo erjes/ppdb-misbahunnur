@@ -110,22 +110,20 @@ class StatusComponent extends Component
     {
         if ($this->registration && $this->registration->status == 'approved') {
             
-            // 1. Bersihkan Data Siswa
-            $studentData = $this->cleanDataForPdf([
+            $studentData = [
                 'student' => $this->student,
                 'registration' => $this->registration,
-                'addressData' => $this->addressData,
-                'parentData' => $this->parentData,
-                'schoolData' => $this->schoolData,
-            ]);
+                'addressData' => $this->student->address ?? [], 
+                'parentData' => $this->student->parent_data ?? [],
+                'schoolData' => $this->student->school ?? [],
+            ];
 
-            // 2. Ambil Setting dari Database
-            $setting = LetterSetting::first(); 
+            $setting = LetterSetting::first();
 
             $letterData = [
                 'sk_number' => '...',
                 'date' => date('d F Y'),
-                'school_year' => date('Y').'-'.(date('Y')+1),
+                'school_year' => date('Y') . '-' . (date('Y') + 1),
                 'signer_name' => 'Panitia',
                 'signer_title' => 'Ketua Panitia',
                 'menimbang' => [],
@@ -133,8 +131,6 @@ class StatusComponent extends Component
                 'signature' => null,
                 'stamp' => null,
                 'city' => 'Cimahi',
-                
-                // Default Halaman 2 (Kosong)
                 'p2_opening' => '',
                 'p2_conditional' => '',
                 'p2_requirements' => [],
@@ -145,17 +141,18 @@ class StatusComponent extends Component
                 'p2_footer_note' => '',
             ];
 
-            // 4. Override dengan Data Database jika ada
             if ($setting) {
-                $replaceVars = function($text) use ($setting) {
+                $replaceVars = function ($text) use ($setting) {
                     return str_replace('[TAHUN]', $setting->school_year, $text ?? '');
                 };
 
-                $sigPath = $setting->signature_path ? public_path('storage/' . str_replace('public/', '', $setting->signature_path)) : null;
-                $stampPath = $setting->stamp_path ? public_path('storage/' . str_replace('public/', '', $setting->stamp_path)) : null;
+                $rawSigPath = $setting->signature_path ? public_path('storage/' . str_replace('public/', '', $setting->signature_path)) : null;
+                $rawStampPath = $setting->stamp_path ? public_path('storage/' . str_replace('public/', '', $setting->stamp_path)) : null;
+
+                $signatureBase64 = $this->convertImageToBase64($rawSigPath);
+                $stampBase64 = $this->convertImageToBase64($rawStampPath);
 
                 $letterData = [
-                    // Page 1
                     'sk_number' => $setting->sk_number,
                     'date' => $setting->date_string,
                     'school_year' => $setting->school_year,
@@ -163,11 +160,9 @@ class StatusComponent extends Component
                     'signer_title' => $setting->signer_title,
                     'menimbang' => explode("\n", $setting->menimbang),
                     'memperhatikan' => explode("\n", $setting->memperhatikan),
-                    'signature' => $sigPath,
-                    'stamp' => $stampPath,
-                    'city' => 'Cimahi', 
-
-                    // Page 2
+                    'signature' => $signatureBase64,
+                    'stamp' => $stampBase64,
+                    'city' => 'Cimahi',
                     'p2_opening' => $replaceVars($setting->p2_opening),
                     'p2_conditional' => $replaceVars($setting->p2_conditional),
                     'p2_requirements' => explode("\n", $setting->p2_requirements),
@@ -179,15 +174,12 @@ class StatusComponent extends Component
                 ];
             }
 
-            // 5. Gabungkan Data
             $finalData = array_merge($studentData, $letterData);
 
-            // 6. Generate PDF
-            $pdf = PDF::loadView('pdf.registration_approved', $finalData);
-            $pdf->setPaper('a4', 'portrait'); 
-            
-            // Ambil nama aman (cek 'nama' atau 'name')
-            $safeName = $this->student->nama ?? $this->student->name ?? 'Siswa';
+            $pdf = Pdf::loadView('pdf.registration_approved', $finalData);
+            $pdf->setPaper('a4', 'portrait');
+
+            $safeName = $this->student->nama_lengkap ?? 'Siswa';
 
             return response()->streamDownload(
                 function () use ($pdf) {
@@ -198,6 +190,20 @@ class StatusComponent extends Component
         }
 
         session()->flash('error', 'Pendaftaran tidak disetujui untuk ekspor.');
+    }
+
+    private function convertImageToBase64($path)
+    {
+        if (!$path || !file_exists($path)) {
+            return null;
+        }
+
+        // Ambil konten file
+        $data = file_get_contents($path);
+        
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        
+        return 'data:image/' . $type . ';base64,' . base64_encode($data);
     }
 
     public function render()

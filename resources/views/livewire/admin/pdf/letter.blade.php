@@ -110,6 +110,17 @@
             <i class="fa-solid fa-signature text-purple-600 mr-2"></i>
             File Tanda Tangan (PNG)
           </label>
+
+          <div class="mt-2 text-xs text-gray-500 bg-white/50 p-2 rounded border border-purple-100">
+            <p class="flex items-center font-medium text-purple-700 mb-1">
+              <i class="fa-solid fa-circle-info mr-1.5"></i> Rekomendasi File:
+            </p>
+            <ul class="list-disc list-inside space-y-0.5 ml-1">
+              <li>Format: <strong>PNG (Transparan)</strong> agar background bersih.</li>
+              <li>Ukuran File: Maksimal <strong>2 MB</strong>.</li>
+              <li>Dimensi Ideal: <strong>300x300 px</strong> (Persegi) atau rasio 1:1.</li>
+            </ul>
+          </div>
           <input type="file" wire:model="signature_image"
             class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200 transition-all">
           <span wire:loading wire:target="signature_image" class="text-sm text-purple-600 mt-2 block">
@@ -119,11 +130,11 @@
           <div class="mt-3">
             @if ($signature_image)
               <p class="text-sm font-medium text-gray-700 mb-2">Preview Baru:</p>
-              <img src="{{ $signature_image->temporaryUrl() }}"
+              <img src="{{  $signature_image->temporaryUrl()  }}"
                 class="h-24 border-2 border-purple-300 rounded-lg shadow-md">
             @elseif ($existing_signature)
               <p class="text-sm font-medium text-gray-700 mb-2">File Saat Ini:</p>
-              <img src="{{ Storage::url($existing_signature) }}"
+              <img src="{{  asset('storage/' . $existing_signature) }}"
                 class="h-24 border-2 border-purple-300 rounded-lg shadow-md">
             @endif
           </div>
@@ -134,6 +145,18 @@
             <i class="fa-solid fa-stamp text-purple-600 mr-2"></i>
             File Stempel (PNG)
           </label>
+
+          <div class="mt-2 text-xs text-gray-500 bg-white/50 p-2 rounded border border-purple-100">
+            <p class="flex items-center font-medium text-purple-700 mb-1">
+              <i class="fa-solid fa-circle-info mr-1.5"></i> Rekomendasi File:
+            </p>
+            <ul class="list-disc list-inside space-y-0.5 ml-1">
+              <li>Format: <strong>PNG (Transparan)</strong> agar background bersih.</li>
+              <li>Ukuran File: Maksimal <strong>2 MB</strong>.</li>
+              <li>Dimensi Ideal: <strong>300x300 px</strong> (Persegi) atau rasio 1:1.</li>
+            </ul>
+          </div>
+
           <input type="file" wire:model="stamp_image"
             class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200 transition-all">
           <span wire:loading wire:target="stamp_image" class="text-sm text-purple-600 mt-2 block">
@@ -143,15 +166,15 @@
           <div class="mt-3">
             @if ($stamp_image)
               <p class="text-sm font-medium text-gray-700 mb-2">Preview Baru:</p>
-              <img src="{{ $stamp_image->temporaryUrl() }}"
-                class="h-24 border-2 border-purple-300 rounded-lg shadow-md">
+              <img src="{{ $stamp_image->temporaryUrl() }}" class="h-24 border-2 border-purple-300 rounded-lg shadow-md">
             @elseif ($existing_stamp)
               <p class="text-sm font-medium text-gray-700 mb-2">File Saat Ini:</p>
-              <img src="{{ Storage::url($existing_stamp) }}"
+              <img src="{{  asset('storage/' . $existing_stamp) }}"
                 class="h-24 border-2 border-purple-300 rounded-lg shadow-md">
             @endif
           </div>
         </div>
+
       </div>
     </div>
 

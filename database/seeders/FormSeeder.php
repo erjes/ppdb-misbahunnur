@@ -20,7 +20,6 @@ class FormSeeder extends Seeder
                 [
                     'step_number' => 1,
                     'title' => 'Ketentuan PMB Online',
-                    // "gelombang_metadata" => "1", 
                     'fields' => [
                         [
                             "name" => "gelombang",

@@ -1,19 +1,17 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Seeders;
 
-use App\Models\Fees;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Seeder;
+use App\Models\Fees; 
 
-class FeesFactory extends Factory
+class FeesSeeder extends Seeder
 {
-    protected $model = Fees::class;
-
-    public function definition()
+    public function run(): void
     {
-        return [
-            'nama_biaya' => $this->faker->word(),
-            'jumlah' => $this->faker->numberBetween(50000, 500000),
-        ];
+        Fees::create([
+            'nama_biaya' => 'Pendaftaran',
+            'jumlah' => 300000,
+        ]);
     }
 }

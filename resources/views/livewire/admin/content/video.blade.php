@@ -36,8 +36,7 @@
             <i class="fa-solid fa-link text-red-600 mr-2"></i>
             URL Video YouTube
           </label>
-          <input id="videoUrl" type="url" wire:model.live="videoUrl" placeholder="Masukkan URL video YouTube"
-            required
+          <input id="videoUrl" type="url" wire:model.live="videoUrl" placeholder="Masukkan URL video YouTube" required
             class="block w-full bg-white border-2 border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 rounded-lg shadow-sm text-gray-700 py-3 px-4 transition-all">
           @error('videoUrl')
             <p class="text-red-600 text-sm mt-2 flex items-center">
@@ -62,15 +61,33 @@
         @endif
 
         <div class="flex gap-3">
-          <button type="submit"
-            class="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center">
-            <i class="fa-solid {{ $isEditing ? 'fa-save' : 'fa-upload' }} mr-2"></i>
-            {{ $isEditing ? 'Simpan Perubahan' : 'Unggah URL Video' }}
+
+          {{-- TOMBOL SUBMIT DENGAN LOADING STATE --}}
+          <button type="submit" wire:loading.attr="disabled" wire:target="uploadVideo, updateVideo"
+            class="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+
+            {{-- Tampilan Normal --}}
+            <span wire:loading.remove wire:target="uploadVideo, updateVideo" class="flex items-center">
+              <i class="fa-solid {{ $isEditing ? 'fa-save' : 'fa-upload' }} mr-2"></i>
+              {{ $isEditing ? 'Simpan Perubahan' : 'Unggah URL Video' }}
+            </span>
+
+            {{-- Tampilan Loading --}}
+            <span wire:loading wire:target="uploadVideo, updateVideo" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
+              {{ $isEditing ? 'Menyimpan...' : 'Mengunggah...' }}
+            </span>
           </button>
 
           @if ($isEditing)
-            <button type="button" wire:click="cancelEdit"
-              class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center">
+            <button type="button" wire:click="cancelEdit" wire:loading.attr="disabled"
+              class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center disabled:opacity-50">
               <i class="fa-solid fa-times mr-2"></i>
               Batal
             </button>
@@ -124,8 +141,7 @@
 
                 <div class="mb-3 text-sm text-gray-600 flex items-center">
                   <i class="fa-solid fa-link text-purple-600 mr-2"></i>
-                  <a href="{{ $video->filename }}" target="_blank"
-                    class="hover:text-purple-600 hover:underline truncate">
+                  <a href="{{ $video->filename }}" target="_blank" class="hover:text-purple-600 hover:underline truncate">
                     {{ Str::limit($video->filename, 40) }}
                   </a>
                 </div>

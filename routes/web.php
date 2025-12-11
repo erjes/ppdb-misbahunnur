@@ -46,15 +46,7 @@ Route::prefix('pendaftaran')->group(function () {
 
 });
 
-Route::get('/video/{filename}', function ($filename) {
-    $filePath = storage_path("app/private/videos/{$filename}");
 
-    if (file_exists($filePath)) {
-        return response()->file($filePath);
-    }
-
-    abort(404);
-})->name('admin.videos.show');
 
 
 require __DIR__.'/auth.php';

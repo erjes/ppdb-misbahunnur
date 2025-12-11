@@ -177,6 +177,11 @@
                     <i class="fas fa-credit-card mr-1.5"></i>
                     Pembayaran
                   </a>
+
+                  <a href="{{ route('admin.registrations.status', $student->id) }}"
+                    class="inline-flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
+                    <i class="fas fa-eye mr-1.5"></i> Detail
+                  </a>
                 </div>
               </td>
             </tr>

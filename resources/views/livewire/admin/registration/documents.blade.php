@@ -8,6 +8,7 @@
     </div>
   @endif
 
+  {{-- HEADER INFORMASI SISWA --}}
   <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
     <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
       <h2 class="text-xl font-bold text-white flex items-center">
@@ -31,24 +32,24 @@
             @php
               $status = $student->registration->status ?? 'pending';
               $statusConfig = [
-                  'pending' => [
-                      'bg' => 'bg-yellow-100',
-                      'text' => 'text-yellow-800',
-                      'icon' => 'fa-clock',
-                      'label' => 'Menunggu Verifikasi',
-                  ],
-                  'approved' => [
-                      'bg' => 'bg-green-100',
-                      'text' => 'text-green-800',
-                      'icon' => 'fa-check-circle',
-                      'label' => 'Diterima',
-                  ],
-                  'rejected' => [
-                      'bg' => 'bg-red-100',
-                      'text' => 'text-red-800',
-                      'icon' => 'fa-times-circle',
-                      'label' => 'Ditolak',
-                  ],
+                'pending' => [
+                  'bg' => 'bg-yellow-100',
+                  'text' => 'text-yellow-800',
+                  'icon' => 'fa-clock',
+                  'label' => 'Menunggu Verifikasi',
+                ],
+                'approved' => [
+                  'bg' => 'bg-green-100',
+                  'text' => 'text-green-800',
+                  'icon' => 'fa-check-circle',
+                  'label' => 'Diterima',
+                ],
+                'rejected' => [
+                  'bg' => 'bg-red-100',
+                  'text' => 'text-red-800',
+                  'icon' => 'fa-times-circle',
+                  'label' => 'Ditolak',
+                ],
               ];
               $currentStatus = $statusConfig[$status] ?? $statusConfig['pending'];
             @endphp
@@ -63,6 +64,7 @@
     </div>
   </div>
 
+  {{-- FORM UPDATE STATUS --}}
   <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
     <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3">
       <h3 class="text-lg font-bold text-white flex items-center">
@@ -86,17 +88,37 @@
             </select>
           </div>
           <div class="flex items-end">
-            <button type="submit"
-              class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center">
-              <i class="fa-solid fa-save mr-2"></i>
-              Update Status
+
+            {{-- TOMBOL UPDATE DENGAN LOADING STATE --}}
+            <button type="submit" wire:loading.attr="disabled" wire:target="updateStatus"
+              class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+
+              {{-- Tampilan Normal --}}
+              <span wire:loading.remove wire:target="updateStatus" class="flex items-center">
+                <i class="fa-solid fa-save mr-2"></i>
+                Update Status
+              </span>
+
+              {{-- Tampilan Loading --}}
+              <span wire:loading wire:target="updateStatus" class="flex items-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                  </path>
+                </svg>
+                Sedang Memproses...
+              </span>
             </button>
+
           </div>
         </div>
       </form>
     </div>
   </div>
 
+  {{-- DAFTAR DOKUMEN --}}
   <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
     <div class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-3">
       <h3 class="text-lg font-bold text-white flex items-center">
@@ -142,8 +164,8 @@
                 @if ($document->file_path)
                   @php
                     $url = route('admin.documents.show', [
-                        'studentId' => $student->id,
-                        'filename' => basename($document->file_path),
+                      'studentId' => $student->id,
+                      'filename' => basename($document->file_path),
                     ]);
                   @endphp
 
@@ -151,15 +173,6 @@
                     class="block group relative overflow-hidden rounded-lg border-2 border-purple-200 hover:border-purple-400 transition-all">
                     <img src="{{ $url }}" alt="Dokumen {{ $document->jenis_dokumen }}"
                       class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
-
-                    {{-- <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
-                                            <div class="transform scale-0 group-hover:scale-100 transition-transform duration-300">
-                                                <div class="bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold shadow-xl flex items-center">
-                                                    <i class="fa-solid fa-eye mr-2"></i>
-                                                    Lihat Dokumen
-                                                </div>
-                                            </div>
-                                        </div> --}}
                   </div>
 
                   <a href="{{ $url }}" target="_blank"
@@ -187,6 +200,7 @@
     </div>
   </div>
 
+  {{-- FOOTER INFO --}}
   <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-5 rounded-lg shadow-sm">
     <div class="flex items-start">
       <i class="fa-solid fa-info-circle text-blue-600 text-xl mr-3 mt-1"></i>
