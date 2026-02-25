@@ -325,6 +325,7 @@ class StepsComponent extends Component
         $userTypeSelected = !empty($userType) && $userType !== '';
         return $userTypeSelected && $this->setuju_ketentuan;
     }
+    
 
     public function render()
     {
